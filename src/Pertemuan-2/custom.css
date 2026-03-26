@@ -1,0 +1,293 @@
+/* Import Font Modern & Elegan */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap");
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+/* --- Tambahan Styling untuk Bagian About Me --- */
+
+/* Ini kontainer induk agar foto dan teks berjejer ke samping */
+.about-content {
+  display: flex;
+  align-items: center; /* Teks dan foto rata tengah secara vertikal */
+  gap: 30px; /* Kasih jarak antara foto dan teks */
+}
+
+/* Styling untuk Fotonya */
+.about-photo {
+  width: 180px; /* Ukuran foto */
+  height: 180px;
+  border-radius: 50%; /* Bikin fotonya jadi bulat sempurna */
+  object-fit: cover; /* Biar fotonya gak gepeng/stretchy */
+
+  /* Bingkai Kaca (Glassmorphism border) agar senada */
+  border: 4px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Shadow soft agar fotonya 'jatuh' */
+  flex-shrink: 0; /* Biar fotonya gak mengecil di layar sempit */
+}
+
+/* Responsif untuk HP: Kalau layarnya kekecilan, foto pindah ke atas teks */
+@media (max-width: 650px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+body {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  /* Gradasi background yang elegan, tidak monoton tapi tetap bersih */
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+  color: #1e293b;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animasi Swipe Up untuk Load Halaman */
+@keyframes swipeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Layout Dasar */
+.section {
+  padding: 40px 20px; /* Sebelumnya 80px, kita kurangi jadi 40px biar lebih rapat */
+  max-width: 900px;
+  margin: auto;
+  animation: swipeUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+/* Delay animasi agar munculnya bergantian (Staggered) */
+.section:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.section:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.section:nth-child(4) {
+  animation-delay: 0.6s;
+}
+.section:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+.section-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #0f172a;
+  position: relative;
+  display: inline-block;
+}
+/* Garis bawah estetik pada judul section */
+.section-title::after {
+  content: "";
+  position: absolute;
+  width: 40%;
+  height: 4px;
+  bottom: -5px;
+  left: 0;
+  background: #3b82f6;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.section:hover .section-title::after {
+  width: 100%;
+}
+
+/* Hero Section (Tipografi Elegan) */
+.hero {
+  text-align: center;
+  padding: 120px 20px 80px;
+  animation: swipeUp 0.8s ease-out forwards;
+}
+
+/* 1. Tulisan "SELAMAT DATANG DI," */
+.hero-subtitle {
+  color: #475569;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: -15px; 
+}
+.hero-title {
+  font-size: clamp(3rem, 8vw, 6rem); 
+  font-weight: 800;
+  background: linear-gradient(to right, #2563eb, #9333ea, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 8px; 
+  margin: 0; 
+  line-height: 1.1;
+}
+
+.hero-name {
+  font-size: 24px;
+  color: #334155;
+  font-weight: 700;
+  margin-top: -5px; 
+}
+.hero-info {
+  margin-top: 30px;
+  color: #475569;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Card Styling (Putih Smooth, Glassmorphism, Shadow Jatuh) */
+.card {
+  /* Putih transparan (bukan putih solid) agar menyatu dengan background */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px); /* Efek kaca */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05); /* Shadow jatuh yang sangat soft */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transisi mantul */
+}
+
+/* Micro-interaction: Hover pada Card */
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9); /* Sedikit lebih solid saat disorot */
+}
+
+/* Project Grid & Interaksi Area Portofolio */
+.project-grid {
+  display: grid;
+  gap: 25px;
+}
+
+/* EFEK MAGIC: Blur card lain saat salah satu di-hover */
+.project-grid:hover .project-card:not(:hover) {
+  filter: blur(4px);
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.project-tools {
+  font-size: 14px;
+  color: #6366f1;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Contact Links (Micro-interaction Cursor) */
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact a {
+  display: inline-block;
+  color: #1e293b;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  cursor: pointer; /* Ubah gaya kursor */
+}
+
+.contact a:hover {
+  background: linear-gradient(to right, #2563eb, #9333ea);
+  color: white;
+  transform: translateX(10px); /* Teks bergeser ke kanan saat di-hover */
+  box-shadow: 0 10px 20px rgba(147, 51, 234, 0.2);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #475569;
+  font-size: 14px;
+}
+
+/* --- Animasi Tipografi PORTO FOLIO (Versi Murni CSS Hover) --- */
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 5rem); 
+  font-weight: 800;
+  display: flex; 
+  justify-content: center;
+  gap: 15px; 
+  margin: 60px 0; 
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer; /* Ubah kursor jadi gambar tangan biar orang tau ini bisa diinteraksi */
+}
+
+.text-porto, .text-folio {
+  background: linear-gradient(to right, #2563eb, #9333ea, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: inline-block;
+}
+
+/* KONDISI AWAL (Default) - Teks Dipaksa Bertumpuk */
+.text-porto {
+  transform: translate(45%, -45px); 
+}
+.text-folio {
+  transform: translate(-45%, 45px); 
+}
+
+/* KONDISI HOVER - Saat mouse diarahkan ke judul, teks mekar jadi 1 baris */
+.hero-title:hover {
+  transform: scale(0.9); /* Tulisan sedikit mengecil biar rapi */
+}
+.hero-title:hover .text-porto {
+  transform: translate(0, 0); /* PORTO kembali ke posisi normal */
+}
+.hero-title:hover .text-folio {
+  transform: translate(0, 0); /* FOLIO kembali ke posisi normal */
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Class utama: Mengatur ukuran, bentuk, dan tebal huruf untuk SEMUA badge */
+.skill-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Class warna spesifik untuk masing-masing badge */
+.badge-blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.badge-red {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.badge-green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.badge-orange {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}

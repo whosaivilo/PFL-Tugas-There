@@ -1,4 +1,4 @@
-// import "./custom.css"; 
+import "./custom.css"; 
 
 export default function BiodataDiri() {
   return (
