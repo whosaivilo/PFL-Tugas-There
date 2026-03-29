@@ -3,7 +3,7 @@ import "./custom.css";
 export default function BiodataDiri() {
   return (
     <Container>
-      <Profile nama="Theresa Olivia" nim="2457301144" />
+      <Profile  nama="Theresa Olivia" />
       <About nama="Theresa Olivia" />
       <Education />
 
@@ -47,26 +47,15 @@ function About(props) {
     <section className="section">
       <h2 className="section-title">About Me</h2>
       <div className="card about-content">
-        <img
-          src="/img/foto.png"
-          alt="Foto Theresa Olivia"
-          className="about-photo"
-        />
+        <img src="img/foto.png" alt="Foto Theresa Olivia" className="about-photo"/>
 
-        <p
-          style={{
-            lineHeight: "1.8",
-            fontSize: "16px",
-            color: "#334155",
-            margin: 0,
-          }}
-        >
+        <p style={{lineHeight: "1.8",fontSize: "16px",color: "#334155",margin: 0,}}>
           Hai, saya <strong>{props.nama.toUpperCase()}</strong>! Mahasiswa
           Sistem Informasi semester 4 di Politeknik Caltex Riau yang sedang
           semangat mengeksplorasi banyak hal. Perjalanan belajarku mencakup
           UI/UX <em>design</em>, pengolahan data, hingga IT Project Management.
           Entah itu saat melakukan riset untuk merancang aplikasi yang{" "}
-          <em>user-centric</em>, atau menyusun logika <em>web development</em>,
+          <em>userX-centric</em>, atau menyusun logika <em>web development</em>,
           aku selalu <em>enjoy</em> menikmati proses mengubah ide menjadi solusi
           digital yang nyata.
         </p>
@@ -110,8 +99,6 @@ function Skills() {
   return (
     <section className="section">
       <h2 className="section-title">Technical Skills</h2>
-
-      {/* Menggunakan class skills-container menggantikan inline style */}
       <div className="card skills-container">
         <span className="skill-badge badge-blue">HTML, CSS, React</span>
 
