@@ -1,0 +1,462 @@
+[
+  {
+    "id": 1,
+    "name": "Senja Rumbai Coffee",
+    "description": "Tempat ngopi estetik dengan suasana rindang khas pepohonan dan udara segar.",
+    "status": "Buka",
+    "rating": 4.8,
+    "imageUrl": "https://picsum.photos/seed/rumbai/400/300",
+    "location": {
+      "street": "Jl. Umban Sari No. 10",
+      "city": "Pekanbaru",
+      "postalCode": "28265"
+    },
+    "contact": {
+      "phone": "081122334455",
+      "instagram": "@senjarumbai",
+      "website": "www.senjarumbai.com"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Toko Roti Ganda & Coffee",
+    "description": "Perpaduan kedai kopi modern dengan sajian roti legendaris yang lembut.",
+    "status": "Buka",
+    "rating": 4.9,
+    "imageUrl": "https://picsum.photos/seed/ganda/400/300",
+    "location": {
+      "street": "Jl. Sudirman No. 45",
+      "city": "Pekanbaru",
+      "postalCode": "28111"
+    },
+    "contact": {
+      "phone": "081233445566",
+      "instagram": "@rotigandacoffee",
+      "website": "www.rotiganda.co.id"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": false,
+      "parkingCapacity": "Terbatas"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Ruang Teduh Roastery",
+    "description": "Spesialis biji kopi lokal yang di-roast sendiri. Cocok untuk nugas dan kerja.",
+    "status": "Buka",
+    "rating": 4.6,
+    "imageUrl": "https://picsum.photos/seed/teduh/400/300",
+    "location": {
+      "street": "Jl. Arifin Ahmad No. 88",
+      "city": "Pekanbaru",
+      "postalCode": "28125"
+    },
+    "contact": {
+      "phone": "085299887766",
+      "instagram": "@ruangteduh.pku",
+      "website": "www.ruangteduh.id"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Titik Temu Sudut",
+    "description": "Desain industrialis dengan sajian kopi susu gula aren andalan.",
+    "status": "Tutup Sementara",
+    "rating": 4.5,
+    "imageUrl": "https://picsum.photos/seed/titik/400/300",
+    "location": {
+      "street": "Jl. Riau No. 12",
+      "city": "Pekanbaru",
+      "postalCode": "28154"
+    },
+    "contact": {
+      "phone": "081344556677",
+      "instagram": "@titiktemu.sudut",
+      "website": null
+    },
+    "facilities": {
+      "wifi": false,
+      "outdoorArea": true,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Kopi Tarik Melayu",
+    "description": "Menyajikan kopi tarik autentik dengan camilan khas Melayu.",
+    "status": "Buka",
+    "rating": 4.7,
+    "imageUrl": "https://picsum.photos/seed/melayu/400/300",
+    "location": {
+      "street": "Jl. Hangtuah No. 5",
+      "city": "Pekanbaru",
+      "postalCode": "28131"
+    },
+    "contact": {
+      "phone": "082155667788",
+      "instagram": "@kopitarikmelayu",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": false,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Lentera Malam Cafe",
+    "description": "Buka hingga larut malam, tempat yang pas untuk obrolan panjang.",
+    "status": "Buka",
+    "rating": 4.4,
+    "imageUrl": "https://picsum.photos/seed/lentera/400/300",
+    "location": {
+      "street": "Jl. Soekarno Hatta No. 90",
+      "city": "Pekanbaru",
+      "postalCode": "28282"
+    },
+    "contact": {
+      "phone": "081199882233",
+      "instagram": "@lenteramalam.cafe",
+      "website": "www.lenteramalam.com"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Sangat Luas"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Prolog Kopi",
+    "description": "Kopi pagi untuk memulai hari dengan semangat baru.",
+    "status": "Buka",
+    "rating": 4.5,
+    "imageUrl": "https://picsum.photos/seed/prolog/400/300",
+    "location": {
+      "street": "Jl. Diponegoro No. 23",
+      "city": "Pekanbaru",
+      "postalCode": "28116"
+    },
+    "contact": {
+      "phone": "081277889900",
+      "instagram": "@prolog.kopi",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Terbatas"
+    }
+  },
+  {
+    "id": 8,
+    "name": "Epilog Roastery",
+    "description": "Menutup hari dengan segelas kopi *manual brew* yang menenangkan.",
+    "status": "Buka",
+    "rating": 4.8,
+    "imageUrl": "https://picsum.photos/seed/epilog/400/300",
+    "location": {
+      "street": "Jl. Pattimura No. 44",
+      "city": "Pekanbaru",
+      "postalCode": "28132"
+    },
+    "contact": {
+      "phone": "085311223344",
+      "instagram": "@epilog.roastery",
+      "website": "www.epilogroastery.id"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": false,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 9,
+    "name": "Simfoni Space",
+    "description": "Menggabungkan konsep *co-working space* dengan kedai kopi beralunan musik klasik.",
+    "status": "Buka",
+    "rating": 4.9,
+    "imageUrl": "https://picsum.photos/seed/simfoni/400/300",
+    "location": {
+      "street": "Jl. HR Subrantas No. 112",
+      "city": "Pekanbaru",
+      "postalCode": "28293"
+    },
+    "contact": {
+      "phone": "082233445566",
+      "instagram": "@simfonispace",
+      "website": "www.simfonispace.com"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  },
+  {
+    "id": 10,
+    "name": "Batas Waktu Cafe",
+    "description": "Kopi cepat saji (*grab-and-go*) untuk kamu yang selalu sibuk.",
+    "status": "Buka",
+    "rating": 4.3,
+    "imageUrl": "https://picsum.photos/seed/batas/400/300",
+    "location": {
+      "street": "Jl. Nangka No. 8",
+      "city": "Pekanbaru",
+      "postalCode": "28124"
+    },
+    "contact": {
+      "phone": "081299887755",
+      "instagram": "@bataswaktu.cafe",
+      "website": null
+    },
+    "facilities": {
+      "wifi": false,
+      "outdoorArea": false,
+      "parkingCapacity": "Sangat Terbatas"
+    }
+  },
+  {
+    "id": 11,
+    "name": "Harmoni Eatery & Coffee",
+    "description": "Bukan sekadar kopi, kami menyajikan pasta dan steak premium.",
+    "status": "Buka",
+    "rating": 4.7,
+    "imageUrl": "https://picsum.photos/seed/harmoni/400/300",
+    "location": {
+      "street": "Jl. Sisingamangaraja No. 55",
+      "city": "Pekanbaru",
+      "postalCode": "28141"
+    },
+    "contact": {
+      "phone": "081122113344",
+      "instagram": "@harmonieatery",
+      "website": "www.harmonieatery.id"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Sangat Luas"
+    }
+  },
+  {
+    "id": 12,
+    "name": "Aroma Kayu",
+    "description": "Kedai berkonsep pondok kayu dengan aroma kopi nusantara yang pekat.",
+    "status": "Buka",
+    "rating": 4.6,
+    "imageUrl": "https://picsum.photos/seed/kayu/400/300",
+    "location": {
+      "street": "Jl. Durian No. 19",
+      "city": "Pekanbaru",
+      "postalCode": "28122"
+    },
+    "contact": {
+      "phone": "081344221133",
+      "instagram": "@aromakayu",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 13,
+    "name": "Puan & Tuan Roastery",
+    "description": "Tempat nge-date nyaman dengan menu kopi mocktail yang unik.",
+    "status": "Buka",
+    "rating": 4.8,
+    "imageUrl": "https://picsum.photos/seed/puantuan/400/300",
+    "location": {
+      "street": "Jl. Kapling No. 3",
+      "city": "Pekanbaru",
+      "postalCode": "28112"
+    },
+    "contact": {
+      "phone": "082188776655",
+      "instagram": "@puantuan.roastery",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  },
+  {
+    "id": 14,
+    "name": "Jejak Langkah Kopi",
+    "description": "Sajian kopi seduh manual bagi para pecinta kopi sejati.",
+    "status": "Tutup Sementara",
+    "rating": 4.5,
+    "imageUrl": "https://picsum.photos/seed/jejak/400/300",
+    "location": {
+      "street": "Jl. Bintara No. 14",
+      "city": "Pekanbaru",
+      "postalCode": "28114"
+    },
+    "contact": {
+      "phone": "085233221100",
+      "instagram": "@jejaklangkah.kopi",
+      "website": "www.jejaklangkah.com"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": false,
+      "parkingCapacity": "Terbatas"
+    }
+  },
+  {
+    "id": 15,
+    "name": "Satu Arah Kopi",
+    "description": "Konsep minimalis serba putih, surganya spot foto OOTD.",
+    "status": "Buka",
+    "rating": 4.6,
+    "imageUrl": "https://picsum.photos/seed/satuarah/400/300",
+    "location": {
+      "street": "Jl. Paus No. 77",
+      "city": "Pekanbaru",
+      "postalCode": "28124"
+    },
+    "contact": {
+      "phone": "081155443322",
+      "instagram": "@satuarah.kopi",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 16,
+    "name": "Garis Tepi Space",
+    "description": "Kopi, matcha, dan croissant terbaik di pinggiran kota.",
+    "status": "Buka",
+    "rating": 4.7,
+    "imageUrl": "https://picsum.photos/seed/garistepi/400/300",
+    "location": {
+      "street": "Jl. Garuda Sakti No. 2",
+      "city": "Pekanbaru",
+      "postalCode": "28293"
+    },
+    "contact": {
+      "phone": "081322334455",
+      "instagram": "@garistepi.space",
+      "website": "www.garistepi.id"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  },
+  {
+    "id": 17,
+    "name": "Kopi Tuah",
+    "description": "Ngopi dengan suasana rumahan yang *homey* dan hangat.",
+    "status": "Buka",
+    "rating": 4.8,
+    "imageUrl": "https://picsum.photos/seed/tuah/400/300",
+    "location": {
+      "street": "Jl. Ronggowarsito No. 21",
+      "city": "Pekanbaru",
+      "postalCode": "28131"
+    },
+    "contact": {
+      "phone": "081277665544",
+      "instagram": "@kopituah.pku",
+      "website": null
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Terbatas"
+    }
+  },
+  {
+    "id": 18,
+    "name": "Masa Lalu Coffee",
+    "description": "Tema retro dan *vintage* dengan pajangan barang antik.",
+    "status": "Buka",
+    "rating": 4.4,
+    "imageUrl": "https://picsum.photos/seed/masalalu/400/300",
+    "location": {
+      "street": "Jl. Kuantan Raya No. 4",
+      "city": "Pekanbaru",
+      "postalCode": "28153"
+    },
+    "contact": {
+      "phone": "082133445566",
+      "instagram": "@masalalu.coffee",
+      "website": null
+    },
+    "facilities": {
+      "wifi": false,
+      "outdoorArea": true,
+      "parkingCapacity": "Sedang"
+    }
+  },
+  {
+    "id": 19,
+    "name": "Kopi Jendela",
+    "description": "Kedai kecil dengan jendela besar yang menghadap langsung ke taman kota.",
+    "status": "Tutup Sementara",
+    "rating": 4.5,
+    "imageUrl": "https://picsum.photos/seed/jendela/400/300",
+    "location": {
+      "street": "Jl. Gajah Mada No. 1",
+      "city": "Pekanbaru",
+      "postalCode": "28111"
+    },
+    "contact": {
+      "phone": "081199887766",
+      "instagram": "@kopijendela",
+      "website": "www.kopijendela.com"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": false,
+      "parkingCapacity": "Terbatas"
+    }
+  },
+  {
+    "id": 20,
+    "name": "Syntax Roastery",
+    "description": "Tempat nongkrong favorit para *developer* dengan colokan di setiap meja.",
+    "status": "Buka",
+    "rating": 4.9,
+    "imageUrl": "https://picsum.photos/seed/syntax/400/300",
+    "location": {
+      "street": "Jl. Melati No. 88",
+      "city": "Pekanbaru",
+      "postalCode": "28294"
+    },
+    "contact": {
+      "phone": "085211223344",
+      "instagram": "@syntax.roastery",
+      "website": "www.syntaxroastery.dev"
+    },
+    "facilities": {
+      "wifi": true,
+      "outdoorArea": true,
+      "parkingCapacity": "Luas"
+    }
+  }
+]
