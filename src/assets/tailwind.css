@@ -1,0 +1,29 @@
+/* Import Tailwind versi 4 yang benar */
+@import "tailwindcss";
+
+/* Import Font Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Kita pakai CSS murni untuk body agar tidak bentrok dengan Vite Plugin Tailwind v4 */
+body {
+  background-color: #f8fafc; /* Sama dengan bg-slate-50 */
+  color: #1e293b;            /* Sama dengan text-slate-800 */
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Biar scrollbar-nya nggak kaku */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* Sama dengan bg-slate-300 */
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8; /* Sama dengan bg-slate-400 */
+}
