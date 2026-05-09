@@ -51,7 +51,7 @@ function App() {
               />
             }
           />
-          <Route path="*" element={<NotFound />} />
+          
         </Route>
 
         {/* Public Routes (Menggunakan AuthLayout Navy) */}
@@ -60,6 +60,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot" element={<Forgot />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
