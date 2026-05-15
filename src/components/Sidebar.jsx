@@ -1,43 +1,96 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BsGrid1X2Fill, BsPeopleFill, BsTagsFill, BsChatDotsFill, BsBoxSeam, BsGraphUp } from "react-icons/bs";
+import { BsGrid1X2, BsBoxSeam, BsGraphUp, BsGear, BsPeople, BsBell, BsChatDots, BsPhone, BsQuestionCircle } from "react-icons/bs";
+import { FiMoreVertical, FiChevronDown } from "react-icons/fi";
+import { FaCartPlus } from "react-icons/fa";
 
 export default function Sidebar() {
+  // Kita gabungkan nama dari Figma dengan Path (routing) dari project aslimu
   const menuItems = [
-    { title: "Dashboard", path: "/", icon: <BsGrid1X2Fill /> },
-    { title: "Data Pasien (Identify)", path: "/customers", icon: <BsPeopleFill /> },
-    { title: "Segmentasi (Differentiate)", path: "/segmentation", icon: <BsTagsFill /> },
-    { title: "Interaksi & Chat (Interact)", path: "/interactions", icon: <BsChatDotsFill /> },
-    { title: "Inventori Obat", path: "/inventory", icon: <BsBoxSeam /> },
-    { title: "Laporan & Analitik", path: "/reports", icon: <BsGraphUp /> },
+    { title: "Dashboard", path: "/", icon: <BsGrid1X2 className="text-[18px]" /> },
+    { title: "Inventory", path: "/inventory", icon: <BsBoxSeam className="text-[18px]" />, hasArrow: true },
+    { title: "Reports", path: "/reports", icon: <BsGraphUp className="text-[18px]" />, hasArrow: true },
+    // Dulu Segmentasi, di desain namanya Configuration
+    { title: "Configuration", path: "/segmentation", icon: <BsGear className="text-[18px]" />, isLastInGroup: true },
+    
+    // Dulu Data Pasien, di desain namanya Contact Management
+    { title: "Contact Management", path: "/customers", icon: <BsPeople className="text-[18px]" />, hasArrow: true, isFirstInGroup: true },
+    { title: "Notifications", path: "/notifications", icon: <BsBell className="text-[18px]" />, badge: "01" },
+    // Dulu Interaksi & Chat, di desain namanya Chat with Visitors
+    { title: "Chat with Visitors", path: "/interactions", icon: <BsChatDots className="text-[18px]" />, isLastInGroup: true },
+
+    { title: "Application Settings", path: "/settings", icon: <BsGear className="text-[18px]" />, isFirstInGroup: true },
+    { title: "Covid -19", path: "/covid", icon: <BsPhone className="text-[18px]" /> },
+    { title: "Get Technical Help", path: "/help", icon: <BsQuestionCircle className="text-[18px]" /> },
   ];
 
   return (
-    <div className="w-64 bg-slate-900 text-white min-h-screen flex flex-col transition-all duration-300 shadow-xl">
+    <div className="w-[260px] bg-[#1d232c] text-gray-300 min-h-screen flex flex-col shrink-0 z-20">
+      
       {/* Logo Area */}
-      <div className="h-20 flex items-center justify-center border-b border-slate-700">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <span className="text-blue-400">Pharma</span><span className="text-white">Care</span>
-        </h1>
+      <div className="h-[72px] flex items-center px-6 border-b border-gray-700/50">
+        <div className="flex items-center gap-3">
+          <div className="bg-[#ffcc00] p-1.5 rounded-md">
+            <FaCartPlus className="text-blue-900 text-lg" />
+          </div>
+          <h1 className="text-[20px] font-bold tracking-wide text-white">
+            Pharma One
+          </h1>
+        </div>
       </div>
 
-      {/* Menu Area */}
-      <div className="flex-1 overflow-y-auto py-6">
-        <ul className="space-y-2 px-4">
+      {/* User Profile Area */}
+      <div className="px-6 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <img 
+              src="https://randomuser.me/api/portraits/men/32.jpg" 
+              alt="User" 
+              className="w-10 h-10 rounded-md object-cover"
+            />
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-[#1d232c] rounded-full"></div>
+          </div>
+          <div>
+            <h3 className="text-[14px] font-bold text-white leading-tight">Subash</h3>
+            <p className="text-[11px] font-medium text-[#ffcc00]">Super Admin</p>
+          </div>
+        </div>
+        <FiMoreVertical className="text-gray-400 cursor-pointer hover:text-white" />
+      </div>
+
+      {/* Menu Area dengan NavLink Aktif */}
+      <div className="flex-1 overflow-y-auto py-2">
+        <ul className="space-y-0.5">
           {menuItems.map((menu, index) => (
-            <li key={index}>
+            <li 
+              key={index} 
+              className={`
+                ${menu.isLastInGroup ? 'border-b border-gray-700/50 pb-4' : ''} 
+                ${menu.isFirstInGroup ? 'mt-2' : ''}
+              `}
+            >
               <NavLink
                 to={menu.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  `flex items-center justify-between px-6 py-3 transition-colors ${
                     isActive 
-                      ? "bg-blue-600 text-white shadow-md" 
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                      ? "bg-[#00a6a6] text-white" 
+                      : "hover:bg-gray-800 text-gray-400 hover:text-white"
                   }`
                 }
               >
-                <span className="text-lg">{menu.icon}</span>
-                <span className="font-medium text-sm">{menu.title}</span>
+                <div className="flex items-center gap-4">
+                  {menu.icon}
+                  <span className="text-[14px] font-medium">{menu.title}</span>
+                </div>
+                
+                {/* Render Icon Panah atau Badge jika ada */}
+                {menu.hasArrow && <FiChevronDown className="text-sm" />}
+                {menu.badge && (
+                  <span className="bg-[#f0483e] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                    {menu.badge}
+                  </span>
+                )}
               </NavLink>
             </li>
           ))}
@@ -45,8 +98,9 @@ export default function Sidebar() {
       </div>
 
       {/* Footer Sidebar */}
-      <div className="p-4 border-t border-slate-700 text-xs text-slate-400 text-center">
-        <p>PharmaCare Admin © 2026</p>
+      <div className="px-6 py-4 bg-[#181d24] flex justify-between items-center">
+        <p className="text-[10px] text-gray-500 font-medium">Powered by Subash © 2022</p>
+        <p className="text-[10px] text-gray-500 font-medium">v 1.1.2</p>
       </div>
     </div>
   );

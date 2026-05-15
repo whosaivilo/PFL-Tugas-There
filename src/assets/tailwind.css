@@ -1,29 +1,93 @@
-/* Import Tailwind versi 4 yang benar */
 @import "tailwindcss";
 
-/* Import Font Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* --- DEKLARASI LOCAL FONT --- */
 
-/* Kita pakai CSS murni untuk body agar tidak bentrok dengan Vite Plugin Tailwind v4 */
-body {
-  background-color: #f8fafc; /* Sama dengan bg-slate-50 */
-  color: #1e293b;            /* Sama dengan text-slate-800 */
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
+/* Poppins Regular (Normal: font-normal) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* Biar scrollbar-nya nggak kaku */
-::-webkit-scrollbar {
-  width: 6px;
+/* Poppins Medium (Sedang: font-medium) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins SemiBold (Agak Tebal: font-semibold) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins Bold (Tebal: font-bold) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins ExtraBold (Sangat Tebal: font-extrabold) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-ExtraBold.ttf') format('truetype');
+  font-weight: 800; /* Diperbaiki: ExtraBold adalah 800 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* --- 1. COLOR PALETTE (Tema Pharma One Figma) --- */
+  
+  /* Warna Utama Aplikasi */
+  --color-primary: #00a6a6;       /* Teal/Cyan (Menu Sidebar Aktif) */
+  --color-primary-login: #3c5e2d; /* Forest Green (Tombol Login Monstera) */
+  --color-accent: #ffcc00;        /* Yellow (Ikon Keranjang & Titik Profil) */
+  --color-sidebar: #1d232c;       /* Dark Slate (Background Sidebar) */
+  
+  /* Warna Background & Teks */
+  --color-neutral-bg: #f4f7f6;    /* Abu-abu sangat muda (Background Dashboard) */
+  --color-neutral-text: #111111;  /* Hitam pekat untuk judul/focal point */
+  
+  /* Warna Semantic (Kotak Metrik Dashboard) */
+  --color-success: #10b981;       /* Hijau (Box Good / Aman) */
+  --color-error: #ef4444;         /* Merah (Box Shortage / Habis) */
+  --color-warning: #eab308;       /* Kuning Emas (Box Revenue / Pendapatan) */
+  --color-info: #38bdf8;          /* Biru Muda (Box Available / Tersedia) */
+
+  /* --- 2. TYPOGRAPHY: Set Poppins jadi font utama Tailwind --- */
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    /* Background default putih (untuk login), teks utama hitam, font Poppins */
+    @apply bg-white text-neutral-text antialiased font-sans;
+  }
+}
+
+/* --- CUSTOM SCROLLBAR (Clean Look) --- */
+::-webkit-scrollbar { 
+  width: 6px; 
   height: 6px;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+::-webkit-scrollbar-track { 
+  background: transparent; 
 }
-::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* Sama dengan bg-slate-300 */
-  border-radius: 9999px;
+::-webkit-scrollbar-thumb { 
+  @apply bg-gray-300 rounded-full; 
 }
-::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8; /* Sama dengan bg-slate-400 */
+::-webkit-scrollbar-thumb:hover { 
+  @apply bg-gray-400; 
 }

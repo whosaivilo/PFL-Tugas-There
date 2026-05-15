@@ -1,119 +1,161 @@
 import React from 'react';
-import PageHeader from '../components/PageHeader';
-import { BsShieldCheck, BsCashStack, BsBoxSeam, BsExclamationTriangleFill } from 'react-icons/bs';
+import { BsShieldPlus, BsCashStack, BsBriefcase, BsExclamationTriangle } from 'react-icons/bs';
+import { FiChevronDown } from "react-icons/fi";
+import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 
 export default function Dashboard() {
   return (
-    <div className="p-6 md:p-8">
-      <PageHeader 
-        title="Dashboard Utama" 
-        description="Ringkasan data inventori apotek dan performa CRM." 
-        actionButton={
-          <button className="bg-white border border-gray-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 shadow-sm">
-            Download Laporan
-          </button>
-        }
-      />
-
-      {/* Bagian Statistik Utama (Dari PDF Pharma One) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-5 flex items-center justify-center flex-col border-b-4 border-green-500">
-            <BsShieldCheck className="text-3xl text-green-500 mb-2" />
-            <h3 className="text-xl font-bold text-gray-800">Aman</h3>
-            <p className="text-xs text-gray-500 mt-1">Status Inventori</p>
+    <div className="w-full">
+      {/* Header Dashboard */}
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h2 className="text-[24px] font-bold text-gray-800 mb-1">Dashboard</h2>
+          <p className="text-[14px] font-medium text-gray-600">A quick data overview of the inventory.</p>
+        </div>
+        <button className="flex items-center gap-8 bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded text-[14px] font-medium hover:bg-gray-50">
+          Download Report
+          <FiChevronDown className="text-gray-600" />
+        </button>
+      </div>
+    
+      {/* 4 KOTAK STATISTIK ATAS (Sama persis border dan ukurannya) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
+        {/* Card 1: Good */}
+        <div className="bg-white rounded border border-[#10b981] flex flex-col h-[150px]">
+          <div className="flex-1 flex flex-col items-center justify-center pt-2">
+            <BsShieldPlus className="text-[32px] text-[#10b981] mb-2" />
+            <h3 className="text-[20px] font-bold text-gray-800 leading-none mb-1">Good</h3>
+            <p className="text-[13px] font-medium text-gray-600">Inventory Status</p>
           </div>
-          <div className="bg-gray-50 py-2 text-center text-xs text-green-600 font-semibold hover:bg-green-100 cursor-pointer transition">Lihat Detail &gt;&gt;</div>
+          <div className="bg-[#d1fae5] py-2 flex items-center justify-center gap-1 text-[12px] text-gray-700 font-medium cursor-pointer">
+            View Detailed Report <HiOutlineChevronDoubleRight />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-5 flex items-center justify-center flex-col border-b-4 border-yellow-400">
-            <BsCashStack className="text-3xl text-yellow-500 mb-2" />
-            <h3 className="text-xl font-bold text-gray-800">Rp 8.558.750</h3>
-            <p className="text-xs text-gray-500 mt-1">Pendapatan Bulan Ini</p>
+        {/* Card 2: Revenue */}
+        <div className="bg-white rounded border border-[#eab308] flex flex-col h-[150px]">
+          <div className="flex-1 flex flex-col items-center justify-center pt-2">
+            <BsCashStack className="text-[32px] text-[#eab308] mb-2" />
+            <h3 className="text-[20px] font-bold text-gray-800 leading-none mb-1">Rs. 8,55,875</h3>
+            <p className="text-[13px] font-medium text-gray-600 flex items-center gap-1">
+              Revenue : <span className="text-gray-800">Jan 2022 <FiChevronDown className="inline"/></span>
+            </p>
           </div>
-          <div className="bg-gray-50 py-2 text-center text-xs text-yellow-600 font-semibold hover:bg-yellow-100 cursor-pointer transition">Lihat Laporan &gt;&gt;</div>
+          <div className="bg-[#fef08a] py-2 flex items-center justify-center gap-1 text-[12px] text-gray-700 font-medium cursor-pointer">
+            View Detailed Report <HiOutlineChevronDoubleRight />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-5 flex items-center justify-center flex-col border-b-4 border-blue-500">
-            <BsBoxSeam className="text-3xl text-blue-500 mb-2" />
-            <h3 className="text-xl font-bold text-gray-800">298</h3>
-            <p className="text-xs text-gray-500 mt-1">Total Obat Tersedia</p>
+        {/* Card 3: Medicines Available */}
+        <div className="bg-white rounded border border-[#38bdf8] flex flex-col h-[150px]">
+          <div className="flex-1 flex flex-col items-center justify-center pt-2">
+            <BsBriefcase className="text-[32px] text-[#38bdf8] mb-2" />
+            <h3 className="text-[20px] font-bold text-gray-800 leading-none mb-1">298</h3>
+            <p className="text-[13px] font-medium text-gray-600">Medicines Available</p>
           </div>
-          <div className="bg-gray-50 py-2 text-center text-xs text-blue-600 font-semibold hover:bg-blue-100 cursor-pointer transition">Kunjungi Inventori &gt;&gt;</div>
+          <div className="bg-[#bae6fd] py-2 flex items-center justify-center gap-1 text-[12px] text-gray-700 font-medium cursor-pointer">
+            Visit Inventory <HiOutlineChevronDoubleRight />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-5 flex items-center justify-center flex-col border-b-4 border-red-500 bg-red-50">
-            <BsExclamationTriangleFill className="text-3xl text-red-500 mb-2" />
-            <h3 className="text-xl font-bold text-red-700">01</h3>
-            <p className="text-xs text-red-600 mt-1">Obat Hampir Habis</p>
+        {/* Card 4: Medicine Shortage */}
+        <div className="bg-white rounded border border-[#ef4444] flex flex-col h-[150px]">
+          <div className="flex-1 flex flex-col items-center justify-center pt-2">
+            <BsExclamationTriangle className="text-[32px] text-[#ef4444] mb-2" />
+            <h3 className="text-[20px] font-bold text-gray-800 leading-none mb-1">01</h3>
+            <p className="text-[13px] font-medium text-gray-600">Medicine Shortage</p>
           </div>
-          <div className="bg-red-100 py-2 text-center text-xs text-red-700 font-bold hover:bg-red-200 cursor-pointer transition">Selesaikan Sekarang &gt;&gt;</div>
+          <div className="bg-[#fecaca] py-2 flex items-center justify-center gap-1 text-[12px] text-gray-700 font-medium cursor-pointer">
+            Resolve Now <HiOutlineChevronDoubleRight />
+          </div>
         </div>
+
       </div>
 
-      {/* Bagian Widget CRM IDIC */}
+      {/* 4 KOTAK RINGKASAN BAWAH */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Widget Segmentasi */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h3 className="text-md font-bold text-slate-800 mb-4 border-b border-gray-100 pb-3">Distribusi Pasien (Segmentasi)</h3>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium text-gray-600">Pasien Penyakit Kronis</span>
-                <span className="font-bold text-slate-800">145 (11%)</span>
-              </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
-                <div className="bg-red-500 h-2 rounded-full" style={{ width: '11%' }}></div>
-              </div>
+        
+        {/* Box 1: Inventory */}
+        <div className="bg-white border border-gray-200 rounded p-5">
+          <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-200">
+            <h3 className="font-bold text-gray-800 text-[16px]">Inventory</h3>
+            <span className="text-[13px] font-medium text-gray-600 flex items-center gap-1 cursor-pointer">
+              Go to Configuration <HiOutlineChevronDoubleRight className="text-gray-400" />
+            </span>
+          </div>
+          <div className="flex justify-between px-2 pt-2">
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">298</p>
+              <p className="text-[13px] font-medium text-gray-600">Total no of Medicines</p>
             </div>
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium text-gray-600">Kesehatan Ibu & Anak</span>
-                <span className="font-bold text-slate-800">320 (24%)</span>
-              </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
-                <div className="bg-pink-400 h-2 rounded-full" style={{ width: '24%' }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium text-gray-600">Pelanggan Umum</span>
-                <span className="font-bold text-slate-800">850 (65%)</span>
-              </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
-                <div className="bg-blue-500 h-2 rounded-full" style={{ width: '65%' }}></div>
-              </div>
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">24</p>
+              <p className="text-[13px] font-medium text-gray-600">Medicine Groups</p>
             </div>
           </div>
         </div>
 
-        {/* Widget Interaksi Terjadwal */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h3 className="text-md font-bold text-slate-800 mb-4 border-b border-gray-100 pb-3">Pengingat & Interaksi Hari Ini</h3>
-          <ul className="space-y-3">
-            <li className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <p className="text-sm text-gray-600 flex-1">Kirim reminder tebus resep <span className="font-bold text-gray-800">Ali Hassan</span></p>
-              <span className="text-xs text-gray-400">09:00</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-              <p className="text-sm text-gray-600 flex-1">Follow-up alergi obat <span className="font-bold text-gray-800">Budi Santoso</span></p>
-              <span className="text-xs text-gray-400">11:30</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-              <p className="text-sm text-gray-600 flex-1">Siapkan paket promo vitamin khusus <span className="font-bold text-gray-800">Segmen Ibu & Anak</span></p>
-              <span className="text-xs text-gray-400">15:00</span>
-            </li>
-          </ul>
-          <button className="w-full mt-5 bg-slate-50 text-blue-600 text-sm font-semibold py-2 rounded-lg hover:bg-slate-100 transition">
-            Lihat Semua Jadwal &gt;&gt;
-          </button>
+        {/* Box 2: Quick Report */}
+        <div className="bg-white border border-gray-200 rounded p-5">
+          <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-200">
+            <h3 className="font-bold text-gray-800 text-[16px]">Quick Report</h3>
+            <span className="text-[13px] font-medium text-gray-800 flex items-center gap-1 cursor-pointer">
+              January 2022 <FiChevronDown />
+            </span>
+          </div>
+          <div className="flex justify-between px-2 pt-2">
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">70,856</p>
+              <p className="text-[13px] font-medium text-gray-600">Qty of Medicines Sold</p>
+            </div>
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">5,288</p>
+              <p className="text-[13px] font-medium text-gray-600">Invoices Generated</p>
+            </div>
+          </div>
         </div>
+
+        {/* Box 3: My Pharmacy */}
+        <div className="bg-white border border-gray-200 rounded p-5">
+          <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-200">
+            <h3 className="font-bold text-gray-800 text-[16px]">My Pharmacy</h3>
+            <span className="text-[13px] font-medium text-gray-600 flex items-center gap-1 cursor-pointer">
+              Go to User Management <HiOutlineChevronDoubleRight className="text-gray-400" />
+            </span>
+          </div>
+          <div className="flex justify-between px-2 pt-2">
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">04</p>
+              <p className="text-[13px] font-medium text-gray-600">Total no of Suppliers</p>
+            </div>
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">05</p>
+              <p className="text-[13px] font-medium text-gray-600">Total no of Users</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Box 4: Customers */}
+        <div className="bg-white border border-gray-200 rounded p-5">
+          <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-200">
+            <h3 className="font-bold text-gray-800 text-[16px]">Customers</h3>
+            <span className="text-[13px] font-medium text-gray-600 flex items-center gap-1 cursor-pointer">
+              Go to Customers Page <HiOutlineChevronDoubleRight className="text-gray-400" />
+            </span>
+          </div>
+          <div className="flex justify-between px-2 pt-2">
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">845</p>
+              <p className="text-[13px] font-medium text-gray-600">Total no of Customers</p>
+            </div>
+            <div className="w-1/2">
+              <p className="text-[22px] font-bold text-gray-800 mb-1">Adalimumab</p>
+              <p className="text-[13px] font-medium text-gray-600">Frequently bought Item</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
