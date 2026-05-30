@@ -1,35 +1,40 @@
 import React, { useState } from "react";
 import PageHeader from "../components/PageHeader";
-import { BsSearch, BsFilter } from "react-icons/bs";
 import Modal from "../components/Modal";
+import Table from "../components/Table";
+import InputField from "../components/InputField";
+import SelectField from "../components/SelectField";
+import { BsSearch, BsFilter } from "react-icons/bs";
 import patientsData from "../data/patientsData.json";
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // 💡 1. Tambah state untuk menampung pilihan segmen pasien
+  const [selectedSegment, setSelectedSegment] = useState("- Semua Segmen -");
 
-  // --- LOGIKA GENERATE ID OTOMATIS ---
-  // 1. Ambil ID terakhir dari data JSON
   const lastPatient = patientsData[patientsData.length - 1];
   const lastId = lastPatient ? lastPatient.id : "PTN-000";
-
-  // 2. Ambil angka setelah tanda '-' (misal: "030")
   const lastNumber = parseInt(lastId.split("-")[1]);
-
-  // 3. Tambah 1 dan format kembali menjadi "PTN-XXX"
   const nextId = `PTN-${String(lastNumber + 1).padStart(3, "0")}`;
 
-  // Filter pencarian
+  // 💡 2. Jalankan logika filter gabungan (Search + Dropdown)
   const filteredPatients = patientsData.filter((patient) => {
-    return (
+    const matchesSearch =
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone.includes(searchTerm)
-    );
+      patient.phone.includes(searchTerm);
+
+    const patientSeg = patient.segment || "Umum"; 
+    const matchesDropdown =
+      selectedSegment === "- Semua Segmen -" || selectedSegment === "" ||
+      patientSeg === selectedSegment;
+
+    return matchesSearch && matchesDropdown;
   });
 
   return (
-    <div className="p-6">
+    <div className="p-6 font-poppins">
       <PageHeader
         title="Data Pasien (Identify)"
         description="Kelola database pasien untuk pelayanan yang lebih personal."
@@ -54,85 +59,59 @@ export default function Customers() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 text-gray-600 text-sm">
-          <BsFilter /> Filter Kategori
-        </button>
+        
+        <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+          <BsFilter className="text-lg text-gray-500" />
+          <div className="w-[160px]">
+            {/* 💡 3. Hubungkan SelectField ke state pilihan segmen */}
+            <SelectField 
+              options={["- Semua Segmen -", "Umum", "Kronis", "Ibu & Anak"]} 
+              value={selectedSegment}
+              onChange={(e) => setSelectedSegment(e.target.value)}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Tabel Data */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">ID Pasien</th>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Nama Pasien</th>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Kontak</th>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100 text-sm">
-            {filteredPatients.length > 0 ? (
-              filteredPatients.map((patient, index) => (
-                <tr key={index} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-gray-500">{patient.id}</td>
-                  <td className="px-6 py-4 font-semibold text-gray-800">{patient.name}</td>
-                  <td className="px-6 py-4 text-gray-600 text-center">{patient.phone}</td>
-                  <td className="px-6 py-4 text-blue-600 font-bold cursor-pointer hover:underline text-center">Detail CRM</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="px-6 py-10 text-center text-gray-400">Data tidak ditemukan.</td>
+      {/* TABEL DATA PASIEN */}
+      <Table>
+        <thead className="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">ID Pasien</th>
+            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Nama Pasien</th>
+            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Segmen</th>
+            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Kontak</th>
+            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100 text-sm">
+          {filteredPatients.length > 0 ? (
+            filteredPatients.map((patient, index) => (
+              <tr key={index} className="hover:bg-gray-50 transition-colors">
+                <td className="px-6 py-4 font-medium text-gray-500">{patient.id}</td>
+                <td className="px-6 py-4 font-semibold text-gray-800">{patient.name}</td>
+                <td className="px-6 py-4 text-gray-600 text-center">{patient.segment || "Umum"}</td>
+                <td className="px-6 py-4 text-gray-600 text-center">{patient.phone}</td>
+                <td className="px-6 py-4 text-blue-600 font-bold cursor-pointer hover:underline text-center">Detail CRM</td>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="px-6 py-10 text-center text-gray-400">Data tidak ditemukan.</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
 
-      {/* MODAL FORM DENGAN ID OTOMATIS */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Tambah Pasien Baru"
-      >
+      {/* MODAL INPUT PASIEN */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Tambah Pasien Baru">
         <form className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">ID Pasien (Otomatis)</label>
-              <input
-                type="text"
-                value={nextId}
-                readOnly
-                className="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg outline-none text-sm font-bold text-slate-600 cursor-not-allowed"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Segmen</label>
-              <select className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none text-sm">
-                <option value="Umum">Umum</option>
-                <option value="Kronis">Kronis</option>
-                <option value="Ibu & Anak">Ibu & Anak</option>
-              </select>
-            </div>
+            <InputField label="ID Pasien (Otomatis)" value={nextId} readOnly />
+            <SelectField label="Segmen" options={["Umum", "Kronis", "Ibu & Anak"]} />
           </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Nama Lengkap</label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              placeholder="Masukkan nama lengkap"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Nomor Telepon</label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              placeholder="08XX-XXXX-XXXX"
-            />
-          </div>
+          <InputField label="Nama Lengkap" placeholder="Masukkan nama lengkap" />
+          <InputField label="Nomor Telepon" placeholder="08XX-XXXX-XXXX" />
 
           <div className="flex gap-3 mt-8">
             <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2 border rounded-lg text-gray-400 text-sm">Batal</button>

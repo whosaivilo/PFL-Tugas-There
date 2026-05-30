@@ -3,21 +3,18 @@ import { NavLink } from 'react-router-dom';
 import { BsGrid1X2, BsBoxSeam, BsGraphUp, BsGear, BsPeople, BsBell, BsChatDots, BsPhone, BsQuestionCircle } from "react-icons/bs";
 import { FiMoreVertical, FiChevronDown } from "react-icons/fi";
 import { FaCartPlus } from "react-icons/fa";
+import Avatar from "./Avatar"; // 1. IMPORT KOMPONEN AVATAR KAMU DI SINI
 
 export default function Sidebar() {
-  // Kita gabungkan nama dari Figma dengan Path (routing) dari project aslimu
+ 
   const menuItems = [
     { title: "Dashboard", path: "/", icon: <BsGrid1X2 className="text-[18px]" /> },
-    { title: "Inventory", path: "/inventory", icon: <BsBoxSeam className="text-[18px]" />, hasArrow: true },
-    { title: "Reports", path: "/reports", icon: <BsGraphUp className="text-[18px]" />, hasArrow: true },
-    // Dulu Segmentasi, di desain namanya Configuration
-    { title: "Configuration", path: "/segmentation", icon: <BsGear className="text-[18px]" />, isLastInGroup: true },
+    { title: "Inventory", path: "/inventory", icon: <BsBoxSeam className="text-[18px]" /> },
+    { title: "Reports", path: "/reports", icon: <BsGraphUp className="text-[18px]" /> },
+    { title: "Segmentasi", path: "/segmentation", icon: <BsGear className="text-[18px]" />, isLastInGroup: true },
     
-    // Dulu Data Pasien, di desain namanya Contact Management
-    { title: "Contact Management", path: "/customers", icon: <BsPeople className="text-[18px]" />, hasArrow: true, isFirstInGroup: true },
-    { title: "Notifications", path: "/notifications", icon: <BsBell className="text-[18px]" />, badge: "01" },
-    // Dulu Interaksi & Chat, di desain namanya Chat with Visitors
-    { title: "Chat with Visitors", path: "/interactions", icon: <BsChatDots className="text-[18px]" />, isLastInGroup: true },
+    { title: "Data Pasien", path: "/customers", icon: <BsPeople className="text-[18px]" />,  isFirstInGroup: true },
+    { title: "Interaksi", path: "/interactions", icon: <BsChatDots className="text-[18px]" />, isLastInGroup: true },
 
     { title: "Application Settings", path: "/settings", icon: <BsGear className="text-[18px]" />, isFirstInGroup: true },
     { title: "Covid -19", path: "/covid", icon: <BsPhone className="text-[18px]" /> },
@@ -34,29 +31,27 @@ export default function Sidebar() {
             <FaCartPlus className="text-blue-900 text-lg" />
           </div>
           <h1 className="text-[20px] font-bold tracking-wide text-white">
-            Pharma One
+            MedConnect
           </h1>
         </div>
       </div>
 
-      {/* User Profile Area */}
-      <div className="px-6 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <img 
-              src="https://randomuser.me/api/portraits/men/32.jpg" 
-              alt="User" 
-              className="w-10 h-10 rounded-md object-cover"
-            />
-            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-[#1d232c] rounded-full"></div>
-          </div>
-          <div>
-            <h3 className="text-[14px] font-bold text-white leading-tight">Subash</h3>
-            <p className="text-[11px] font-medium text-[#ffcc00]">Super Admin</p>
-          </div>
-        </div>
-        <FiMoreVertical className="text-gray-400 cursor-pointer hover:text-white" />
-      </div>
+ <div className="px-6 py-5 flex items-center justify-between">
+  <div className="flex items-center gap-3">
+    <div className="relative">
+      {/* Panggil komponen Avatar dengan path gambar public kamu */}
+      <Avatar name="Theresa Olivia" image="/img/pfp admin.jpg" />
+      
+      {/* Dot online hijau tetap di posisinya */}
+      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-[#1d232c] rounded-full"></div>
+    </div>
+    <div>
+      <h3 className="text-[14px] font-bold text-white leading-tight">Theresa Olivia</h3>
+      <p className="text-[11px] font-medium text-[#ffcc00]">Super Admin</p>
+    </div>
+  </div>
+  <FiMoreVertical className="text-gray-400 cursor-pointer hover:text-white" />
+</div>
 
       {/* Menu Area dengan NavLink Aktif */}
       <div className="flex-1 overflow-y-auto py-2">

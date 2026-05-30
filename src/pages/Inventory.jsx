@@ -1,121 +1,119 @@
 import React, { useState } from "react";
+import PageHeader from "../components/PageHeader"; 
 import Modal from "../components/Modal";
+import Button from "../components/Button";
+import Table from "../components/Table";
+import InputField from "../components/InputField";
+import SelectField from "../components/SelectField";
 import inventoryData from "../data/inventoryData.json";
 import { BsSearch, BsPlus, BsFilter } from 'react-icons/bs';
 import { FiChevronDown, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { HiOutlineChevronDoubleRight, HiOutlineSelector } from "react-icons/hi";
 
 export default function Inventory() {
-  // 1. STATE MANAGEMENT (Dari Kodinganmu)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  // 💡 1. Tambah state untuk menampung pilihan grup filter obat
+  const [selectedGroup, setSelectedGroup] = useState("- Select Group -");
   
+  // 💡 2. Jalankan logika filter gabungan (Search + Dropdown)
   const filteredMedicines = inventoryData.filter((med) => {
-    return (
+    const matchesSearch =
       med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       med.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      med.group.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      med.group.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesDropdown = 
+      selectedGroup === "- Select Group -" || selectedGroup === "" ||
+      med.group === selectedGroup;
+
+    return matchesSearch && matchesDropdown;
   });
 
   return (
-    <div className="w-full flex flex-col p-2">
+    <div className="p-6 font-poppins">
       
-      {/* 2. HEADER HALAMAN (Gaya Figma) */}
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h2 className="text-[24px] mb-1">
-            <span className="font-bold text-gray-500">Inventory</span>
-            <span className="mx-2 text-gray-400">›</span>
-            {/* Angka total obat dinamis dari panjang array JSON */}
-            <span className="font-bold text-gray-800">List of Medicines ({inventoryData.length})</span>
-          </h2>
-          <p className="text-[14px] font-medium text-gray-600">List of medicines available for sales.</p>
-        </div>
-        
-        {/* Tombol Add New Item (Trigger Modal) */}
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-[#f0483e] text-white px-4 py-2 rounded text-[14px] font-medium hover:bg-red-600 transition shadow-sm"
-        >
-          <BsPlus className="text-xl" /> Add New Item
-        </button>
-      </div>
+      {/* SEKSI HEADER HALAMAN */}
+      <PageHeader
+        title={`List of Medicines (${inventoryData.length})`}
+        description="List of medicines available for sales."
+        actionButton={
+          <Button type="dark" onClick={() => setIsModalOpen(true)}>
+            <BsPlus className="text-xl" /> Add New Item
+          </Button>
+        }
+      />
 
-      {/* 3. FILTER & SEARCH BAR (Gaya Figma + Logika Kodinganmu) */}
-      <div className="flex justify-between items-center mb-4">
-        {/* Search */}
-        <div className="relative w-[380px]">
+      {/* FILTER & SEARCH BAR */}
+      <div className="flex flex-col md:flex-row gap-4 my-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+        <div className="relative flex-1">
+          <BsSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search Medicine Inventory.."
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-gray-300 text-[13px] font-medium py-2.5 pl-4 pr-10 rounded outline-none text-gray-700 focus:border-gray-400"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
           />
-          <BsSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-800 font-bold" />
         </div>
         
-        {/* Select Group Filter */}
-        <div className="flex items-center gap-4">
-          <BsFilter className="text-2xl text-gray-600 cursor-pointer" />
-          <div className="relative w-[200px]">
-            <select className="w-full bg-white border border-gray-300 text-[14px] font-medium py-2 px-4 rounded outline-none text-gray-700 appearance-none cursor-pointer">
-              <option>- Select Group -</option>
-              <option value="Generic Medicine">Generic Medicine</option>
-              <option value="Diabetes">Diabetes</option>
-            </select>
-            <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600" />
+        <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+          <BsFilter className="text-lg text-gray-500" />
+          <div className="w-[160px]">
+            {/* 💡 3. Hubungkan SelectField ke state pilihan group */}
+            <SelectField 
+              options={["- Select Group -", "Generic Medicine", "Diabetes"]} 
+              value={selectedGroup}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+            />
           </div>
         </div>
       </div>
 
-      {/* 4. TABEL INVENTORI (Gaya Figma + Map Data JSON) */}
-      <div className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden mb-6">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-gray-200 bg-white">
-              <th className="py-4 px-6 text-[15px] font-medium text-gray-800">
-                <div className="flex items-center gap-2">Medicine Name <HiOutlineSelector className="text-gray-400 text-lg cursor-pointer" /></div>
-              </th>
-              <th className="py-4 px-6 text-[15px] font-medium text-gray-800">
-                <div className="flex items-center gap-2">Medicine ID <HiOutlineSelector className="text-gray-400 text-lg cursor-pointer" /></div>
-              </th>
-              <th className="py-4 px-6 text-[15px] font-medium text-gray-800">
-                <div className="flex items-center gap-2">Group Name <HiOutlineSelector className="text-gray-400 text-lg cursor-pointer" /></div>
-              </th>
-              <th className="py-4 px-6 text-[15px] font-medium text-gray-800">
-                <div className="flex items-center gap-2">Stock in Qty <HiOutlineSelector className="text-gray-400 text-lg cursor-pointer" /></div>
-              </th>
-              <th className="py-4 px-6 text-[15px] font-medium text-gray-800">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMedicines.length > 0 ? (
-              filteredMedicines.map((med, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition">
-                  <td className="py-4 px-6 text-[14px] font-medium text-gray-700">{med.name}</td>
-                  <td className="py-4 px-6 text-[14px] font-medium text-gray-600">{med.id}</td>
-                  <td className="py-4 px-6 text-[14px] font-medium text-gray-600">{med.group}</td>
-                  <td className="py-4 px-6 text-[14px] font-medium text-gray-600">{med.stock}</td>
-                  <td className="py-4 px-6 text-[14px] font-medium text-gray-700 cursor-pointer hover:text-black">
-                    <div className="flex items-center gap-1">
-                      View Full Detail <HiOutlineChevronDoubleRight className="text-gray-400 text-xs" />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="px-6 py-8 text-center text-gray-500 font-medium">
-                  Tidak ada obat yang cocok dengan pencarian "{searchTerm}".
+      {/* TABEL INVENTORI */}
+      <Table>
+        <thead className="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th className="py-4 px-6 text-xs font-semibold text-gray-600 uppercase">
+              <div className="flex items-center gap-2">Medicine Name </div>
+            </th>
+            <th className="py-4 px-6 text-xs font-semibold text-gray-600 uppercase">
+              <div className="flex items-center gap-2">Medicine ID </div>
+            </th>
+            <th className="py-4 px-6 text-xs font-semibold text-gray-600 uppercase">
+              <div className="flex items-center gap-2">Group Name</div>
+            </th>
+            <th className="py-4 px-6 text-xs font-semibold text-gray-600 uppercase">
+              <div className="flex items-center gap-2">Stock in Qty </div>
+            </th>
+            <th className="py-4 px-6 text-xs font-semibold text-gray-600 uppercase">Action</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100 text-sm">
+          {filteredMedicines.length > 0 ? (
+            filteredMedicines.map((med, index) => (
+              <tr key={index} className="hover:bg-gray-50 transition-colors">
+                <td className="py-4 px-6 font-semibold text-gray-800">{med.name}</td>
+                <td className="py-4 px-6 font-medium text-gray-500">{med.id}</td>
+                <td className="py-4 px-6 text-gray-600">{med.group}</td>
+                <td className="py-4 px-6 text-gray-600">{med.stock}</td>
+                <td className="py-4 px-6 text-blue-600 font-bold cursor-pointer hover:underline">
+                  <div className="flex items-center gap-1">
+                    View Full Detail <HiOutlineChevronDoubleRight className="text-gray-400 text-xs" />
+                  </div>
                 </td>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="px-6 py-8 text-center text-gray-400">
+                Tidak ada obat yang cocok dengan filter atau pencarian Anda.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
 
-      {/* 5. PAGINATION (BAGIAN BAWAH) */}
+      {/* PAGINATION */}
       <div className="flex justify-between items-center mb-4">
         <p className="text-[14px] font-medium text-gray-600">Showing 1 - {filteredMedicines.length} results of {inventoryData.length}</p>
         <div className="flex items-center gap-4">
@@ -131,53 +129,29 @@ export default function Inventory() {
         </div>
       </div>
 
-      {/* 6. MODAL TAMBAH OBAT (Dari Kodinganmu) */}
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        title="Add New Medicine to Inventory"
-      >
+      {/* MODAL INPUT */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Medicine to Inventory">
         <form className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase mb-1">Medicine Name</label>
-            <input type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-md outline-none focus:ring-1 focus:ring-gray-400" placeholder="e.g. Paracetamol 500mg" />
-          </div>
+          <InputField label="Medicine Name" placeholder="e.g. Paracetamol 500mg" />
           
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Medicine ID</label>
-              <input type="text" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-md outline-none focus:ring-1 focus:ring-gray-400" placeholder="MED-XXXX" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Group</label>
-              <select className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-md outline-none appearance-none focus:ring-1 focus:ring-gray-400">
-                <option value="">- Select Group -</option>
-                <option value="Generic Medicine">Generic Medicine</option>
-                <option value="Diabetes">Diabetes</option>
-                <option value="Hypertension">Hypertension</option>
-                <option value="OTC Medicine">OTC Medicine</option>
-              </select>
-            </div>
+            <InputField label="Medicine ID" placeholder="MED-XXXX" />
+            <SelectField label="Group" options={["- Select Group -", "Generic Medicine", "Diabetes", "Hypertension", "OTC Medicine"]} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Quantity</label>
-              <input type="number" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-md outline-none focus:ring-1 focus:ring-gray-400" placeholder="0" />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Expiry Date</label>
-              <input type="date" className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-md outline-none focus:ring-1 focus:ring-gray-400" />
-            </div>
+            <InputField label="Quantity" type="number" placeholder="0" />
+            <InputField label="Expiry Date" type="date" />
           </div>
 
           <div className="flex gap-3 mt-6">
             <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition font-medium">Cancel</button>
-            <button type="submit" className="flex-1 px-4 py-2 bg-[#f0483e] text-white rounded-md hover:bg-red-600 transition font-medium">Save Details</button>
+            <Button type="dark">
+              Save Details
+            </Button>
           </div>
         </form>
       </Modal>
-
     </div>
   );
 }

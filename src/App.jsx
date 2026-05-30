@@ -30,7 +30,7 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        {/* Private Routes (Menggunakan MainLayout Navy) */}
+   
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/customers" element={<Customers />} />

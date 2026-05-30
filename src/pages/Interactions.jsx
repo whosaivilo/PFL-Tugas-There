@@ -1,85 +1,91 @@
 import React from 'react';
 import PageHeader from '../components/PageHeader';
-import { BsChatDotsFill, BsWhatsapp, BsEnvelopeAtFill, BsTelephoneFill } from 'react-icons/bs';
+import Button from '../components/Button'; 
+import Badge from '../components/Badge';   
+import StatCard from '../components/StatCard'; 
+import InteractionLogItem from '../components/InteractionLogItem'; 
+import { BsChatDotsFill, BsWhatsapp, BsEnvelopeAtFill, BsTelephoneFill, BsBriefcase } from 'react-icons/bs';
 
 // IMPORT DATA JSON PASIEN DARI TAHAP 'IDENTIFY'
 import patientsData from '../data/patientsData.json';
 
 export default function Interactions() {
-  // Kita ambil 4 pasien pertama dari JSON untuk dijadikan contoh log interaksi
-  // Jadi kalau nama pasien di JSON diubah, di halaman ini otomatis ikut berubah!
   const interactions = [
     { 
-      name: patientsData[0].name, 
-      segment: patientsData[0].segment,
-      phone: patientsData[0].phone,
+      name: patientsData[0]?.name || "Ali Hassan", 
+      segment: patientsData[0]?.segment || "Kronis",
+      phone: patientsData[0]?.phone || "0812-3456-7890",
       type: "WhatsApp", 
       icon: <BsWhatsapp className="text-green-500" />, 
       message: "Pengingat Otomatis: Stok obat rutin Anda diperkirakan habis dalam 3 hari. Balas 'YA' untuk proses refill resep.", 
       time: "Hari ini, 09:00", 
       status: "Terkirim",
+      badgeVariant: "secondary"
     },
     { 
-      name: patientsData[1].name, 
-      segment: patientsData[1].segment,
-      phone: patientsData[1].phone,
+      name: patientsData[1]?.name || "Budi Santoso", 
+      segment: patientsData[1]?.segment || "Umum",
+      phone: patientsData[1]?.phone || "0821-1122-3344",
       type: "Email", 
       icon: <BsEnvelopeAtFill className="text-blue-500" />, 
       message: "Newsletter: Promo Bundling Vitamin C khusus pelanggan setia PharmaCare.", 
       time: "Kemarin, 14:30", 
       status: "Dibaca",
+      badgeVariant: "info"
     },
     { 
-      name: patientsData[3].name, // Mengambil pasien ke-4 (Rina Wati - Ibu & Anak)
-      segment: patientsData[3].segment,
-      phone: patientsData[3].phone,
+      name: patientsData[2]?.name || "Siti Aminah", 
+      segment: patientsData[2]?.segment || "Ibu & Anak",
+      phone: patientsData[2]?.phone || "0852-9988-7766",
       type: "Konsultasi Apoteker", 
       icon: <BsChatDotsFill className="text-purple-500" />, 
       message: "Pasien konsultasi mengenai dosis vitamin anak. Apoteker menyarankan dosis 1 sendok teh sehari setelah makan.", 
       time: "12 Jan 2026, 10:15", 
       status: "Selesai",
+      badgeVariant: "success"
     },
     { 
-      name: patientsData[8].name, // Mengambil pasien ke-9 (Guntur Wijaya - Kronis)
-      segment: patientsData[8].segment,
-      phone: patientsData[8].phone,
+      name: patientsData[3]?.name || "Rina Wati", 
+      segment: patientsData[3]?.segment || "Ibu & Anak",
+      phone: patientsData[3]?.phone || "0813-4455-6677",
       type: "Telepon", 
       icon: <BsTelephoneFill className="text-orange-500" />, 
       message: "Follow up pasca-pembelian antibiotik. Pasien dihubungi untuk dipastikan menghabiskan obat sesuai resep dokter.", 
       time: "10 Jan 2026, 16:45", 
       status: "Selesai",
+      badgeVariant: "success"
     },
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-6 font-poppins">
       <PageHeader 
         title="Interaksi & Chat (Interact)" 
         description="Kelola jadwal pengingat obat (Reminder) dan riwayat komunikasi pasien." 
         actionButton={
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 shadow-sm transition flex items-center gap-2">
+          <Button type="success" onClick={() => alert("Pesan massal berhasil disebarkan ke WhatsApp pasien!")}>
             <BsWhatsapp /> Kirim Pesan Massal
-          </button>
+          </Button>
         }
       />
 
-      {/* Statistik Cepat */}
-      <div className="grid grid-cols-3 gap-4 mt-6 mb-6">
-        <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-          <p className="text-xs text-gray-500 font-bold uppercase mb-1">Total Broadcast</p>
-          <h4 className="text-2xl font-extrabold text-slate-800">1,245</h4>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-          <p className="text-xs text-gray-500 font-bold uppercase mb-1">Pesan Dibaca</p>
-          <h4 className="text-2xl font-extrabold text-blue-600">89%</h4>
-        </div>
-        <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-          <p className="text-xs text-gray-500 font-bold uppercase mb-1">Refill Sukses</p>
-          <h4 className="text-2xl font-extrabold text-green-600">320</h4>
-        </div>
+      {/* 3 KOTAK STATCARD */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 mb-6">
+        <StatCard 
+          title="Total Broadcast" value="1,245" icon={<BsChatDotsFill className="text-[32px] text-slate-500 mb-2" />} 
+          borderColor="border-slate-300" subtext="View Broadcast History" bgFooter="bg-slate-100" 
+        />
+        <StatCard 
+          title="Pesan Dibaca" value="89%" icon={<BsWhatsapp className="text-[32px] text-[#10b981] mb-2" />} 
+          borderColor="border-[#10b981]" subtext="View Read Analytics" bgFooter="bg-[#d1fae5]" 
+        />
+        <StatCard 
+          title="Refill Sukses" value="320" icon={<BsBriefcase className="text-[32px] text-[#38bdf8] mb-2" />} 
+          borderColor="border-[#38bdf8]" subtext="View Refill Logs" bgFooter="bg-[#bae6fd]" 
+        />
       </div>
 
-      {/* Log Interaksi */}
+      {/* Area Log Interaksi */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
           <h3 className="text-sm font-bold text-gray-700">Log Interaksi Terkini</h3>
@@ -88,48 +94,10 @@ export default function Interactions() {
         
         <div className="divide-y divide-gray-100">
           {interactions.map((log, index) => (
-            <div key={index} className="p-5 hover:bg-slate-50 transition flex gap-4 items-start">
-              {/* Icon */}
-              <div className="mt-1 bg-white p-3 border border-gray-100 rounded-full shadow-sm">
-                {log.icon}
-              </div>
-              
-              {/* Konten */}
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-1">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-bold text-gray-800">{log.name}</p>
-                    <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                      {log.segment}
-                    </span>
-                  </div>
-                  <span className="text-xs text-gray-400 font-medium">{log.time}</span>
-                </div>
-                
-                <p className="text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
-                  Jalur Komunikasi: <span className="text-slate-800">{log.type}</span> 
-                  <span className="text-gray-400 font-normal">({log.phone})</span>
-                </p>
-                
-                <p className="text-sm text-gray-600 bg-white p-3 border border-gray-100 rounded-lg rounded-tl-none inline-block shadow-sm w-full md:w-3/4">
-                  "{log.message}"
-                </p>
-                
-                <div className="mt-3">
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-                    log.status === 'Terkirim' ? 'bg-gray-100 text-gray-600' : 
-                    log.status === 'Dibaca' ? 'bg-blue-100 text-blue-700' : 
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    Status: {log.status}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <InteractionLogItem key={index} {...log} />
           ))}
         </div>
       </div>
-      
     </div>
   );
 }
