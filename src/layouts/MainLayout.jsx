@@ -7,13 +7,16 @@ import { FiChevronDown } from "react-icons/fi";
 
 export default function MainLayout() {
   return (
-    <div className="flex min-h-screen bg-[#f4f7f6] font-sans">
+    // 💡 1. KUNCI LAYAR UTAMA: Ganti min-h-screen menjadi h-screen w-screen overflow-hidden
+    <div className="flex h-screen w-screen overflow-hidden bg-[#f4f7f6] font-sans">
       
       {/* SIDEBAR */}
-      <Sidebar />
+      {/* 💡 2. Pastikan tinggi sidebar penuh dan tidak menyusut */}
+      <Sidebar className="h-full shrink-0" />
 
       {/* KONTEN UTAMA */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* 💡 3. Tambahkan h-full agar wrapper kanan mengikuti tinggi layar utama */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
         
         {/* HEADER (Sama persis dengan referensi) */}
         <div className="bg-white h-[72px] border-b border-gray-200 flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
@@ -46,7 +49,8 @@ export default function MainLayout() {
           </div>
         </div>
 
-        {/* AREA KONTEN (Dashboard) */}
+        {/* AREA KONTEN (Dashboard / Page Lain) */}
+        {/* Properti flex-1 dan overflow-y-auto di sini sekarang bekerja 100% mengontrol scroll internal */}
         <main className="flex-1 overflow-y-auto p-8">
           <Outlet />
         </main>
