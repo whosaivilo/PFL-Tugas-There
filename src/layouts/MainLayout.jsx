@@ -4,24 +4,18 @@ import Sidebar from "../components/Sidebar";
 import { BsSearch } from "react-icons/bs";
 import { MdOutlineGTranslate } from "react-icons/md";
 import { FiChevronDown } from "react-icons/fi";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function MainLayout() {
   return (
-    // 💡 1. KUNCI LAYAR UTAMA: Ganti min-h-screen menjadi h-screen w-screen overflow-hidden
     <div className="flex h-screen w-screen overflow-hidden bg-[#f4f7f6] font-sans">
       
-      {/* SIDEBAR */}
-      {/* 💡 2. Pastikan tinggi sidebar penuh dan tidak menyusut */}
       <Sidebar className="h-full shrink-0" />
 
-      {/* KONTEN UTAMA */}
-      {/* 💡 3. Tambahkan h-full agar wrapper kanan mengikuti tinggi layar utama */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-full">
         
-        {/* HEADER (Sama persis dengan referensi) */}
         <div className="bg-white h-[72px] border-b border-gray-200 flex items-center justify-between px-8 shadow-sm z-10 shrink-0">
           
-          {/* Search Bar */}
           <div className="relative w-[400px]">
             <input 
               type="text" 
@@ -31,7 +25,6 @@ export default function MainLayout() {
             <BsSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold" />
           </div>
 
-          {/* Right Header Controls */}
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2 cursor-pointer">
               <MdOutlineGTranslate className="text-[20px] text-gray-600" />
@@ -49,12 +42,13 @@ export default function MainLayout() {
           </div>
         </div>
 
-        {/* AREA KONTEN (Dashboard / Page Lain) */}
-        {/* Properti flex-1 dan overflow-y-auto di sini sekarang bekerja 100% mengontrol scroll internal */}
         <main className="flex-1 overflow-y-auto p-8">
           <Outlet />
         </main>
       </div>
+      
+      
+      <Toaster position="top-right" richColors />
     </div>
   );
 }

@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import PageHeader from "../components/PageHeader";
-import Modal from "../components/Modal";
 import Table from "../components/Table";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
 import { BsSearch, BsFilter } from "react-icons/bs";
 import patientsData from "../data/patientsData.json";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose, // 💡 Tambahan: Untuk tombol "Batal" agar bisa menutup dialog otomatis
+} from "@/components/ui/dialog";
 
 export default function Customers() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // 💡 1. Tambah state untuk menampung pilihan segmen pasien
+  // 💡 State isModalOpen sudah kita hapus karena Shadcn menanganinya secara otomatis
   const [selectedSegment, setSelectedSegment] = useState("- Semua Segmen -");
 
   const lastPatient = patientsData[patientsData.length - 1];
@@ -18,7 +25,6 @@ export default function Customers() {
   const lastNumber = parseInt(lastId.split("-")[1]);
   const nextId = `PTN-${String(lastNumber + 1).padStart(3, "0")}`;
 
-  // 💡 2. Jalankan logika filter gabungan (Search + Dropdown)
   const filteredPatients = patientsData.filter((patient) => {
     const matchesSearch =
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -39,12 +45,45 @@ export default function Customers() {
         title="Data Pasien (Identify)"
         description="Kelola database pasien untuk pelayanan yang lebih personal."
         actionButton={
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition shadow-sm"
-          >
-            + Tambah Pasien Baru
-          </button>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition shadow-sm">
+                + Tambah Pasien Baru
+              </button>
+            </DialogTrigger>
+
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Tambah Pasien Baru</DialogTitle>
+                <DialogDescription>
+                  Masukkan data diri pasien dengan lengkap ke dalam sistem CRM.
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Form Input Pasien */}
+              <form className="space-y-4 mt-2">
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField label="ID Pasien (Otomatis)" value={nextId} readOnly />
+                  <SelectField label="Segmen" options={["Umum", "Kronis", "Ibu & Anak"]} />
+                </div>
+                <InputField label="Nama Lengkap" placeholder="Masukkan nama lengkap" />
+                <InputField label="Nomor Telepon" placeholder="08XX-XXXX-XXXX" />
+
+                <div className="flex gap-3 mt-8">
+                  {/* 💡 DialogClose membungkus tombol Batal agar otomatis menutup modal */}
+                  <DialogClose asChild>
+                    <button type="button" className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-600 font-medium text-sm hover:bg-gray-50 transition">
+                      Batal
+                    </button>
+                  </DialogClose>
+                  <button type="submit" className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm hover:bg-blue-700 transition shadow-sm">
+                    Simpan Pasien
+                  </button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         }
       />
 
@@ -63,7 +102,6 @@ export default function Customers() {
         <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
           <BsFilter className="text-lg text-gray-500" />
           <div className="w-[160px]">
-            {/* 💡 3. Hubungkan SelectField ke state pilihan segmen */}
             <SelectField 
               options={["- Semua Segmen -", "Umum", "Kronis", "Ibu & Anak"]} 
               value={selectedSegment}
@@ -102,23 +140,8 @@ export default function Customers() {
           )}
         </tbody>
       </Table>
-
-      {/* MODAL INPUT PASIEN */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Tambah Pasien Baru">
-        <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <InputField label="ID Pasien (Otomatis)" value={nextId} readOnly />
-            <SelectField label="Segmen" options={["Umum", "Kronis", "Ibu & Anak"]} />
-          </div>
-          <InputField label="Nama Lengkap" placeholder="Masukkan nama lengkap" />
-          <InputField label="Nomor Telepon" placeholder="08XX-XXXX-XXXX" />
-
-          <div className="flex gap-3 mt-8">
-            <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 px-4 py-2 border rounded-lg text-gray-400 text-sm">Batal</button>
-            <button type="submit" className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm hover:bg-blue-700">Simpan Pasien</button>
-          </div>
-        </form>
-      </Modal>
+      
+      {/* 💡 Tag <Modal> manual di bagian paling bawah sini sudah dihapus total! */}
     </div>
   );
 }
