@@ -69,6 +69,7 @@ export default function Sidebar() {
       icon: <BsQuestionCircle className="text-[18px]" />,
     },
   ];
+  const adminData = { inisial: "TO", role: "Super Admin" };
 
   return (
     <div className="w-[260px] bg-[#1d232c] text-gray-300 min-h-screen flex flex-col shrink-0 z-20">
@@ -95,7 +96,7 @@ export default function Sidebar() {
                 alt="Theresa Olivia"
               />
               <AvatarFallback className="bg-blue-100 text-blue-700 font-bold">
-                TO
+                {adminData.inisial}
               </AvatarFallback>
             </Avatar>
 
