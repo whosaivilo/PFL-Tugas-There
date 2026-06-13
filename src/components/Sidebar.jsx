@@ -19,53 +19,53 @@ export default function Sidebar() {
   const menuItems = [
     {
       title: "Dashboard",
-      path: "/",
+      path: "/admin",
       icon: <BsGrid1X2 className="text-[18px]" />,
     },
     {
       title: "Inventory",
-      path: "/inventory",
+      path: "/admin/inventory",
       icon: <BsBoxSeam className="text-[18px]" />,
     },
     {
       title: "Reports",
-      path: "/reports",
+      path: "/admin/reports",
       icon: <BsGraphUp className="text-[18px]" />,
     },
     {
       title: "Segmentasi",
-      path: "/segmentation",
+      path: "/admin/segmentation",
       icon: <BsGear className="text-[18px]" />,
       isLastInGroup: true,
     },
 
     {
       title: "Data Pasien",
-      path: "/customers",
+      path: "/admin/customers",
       icon: <BsPeople className="text-[18px]" />,
       isFirstInGroup: true,
     },
     {
       title: "Interaksi",
-      path: "/interactions",
+      path: "/admin/interactions",
       icon: <BsChatDots className="text-[18px]" />,
       isLastInGroup: true,
     },
 
     {
       title: "Application Settings",
-      path: "/settings",
+      path: "/admin/settings",
       icon: <BsGear className="text-[18px]" />,
       isFirstInGroup: true,
     },
     {
       title: "Covid -19",
-      path: "/covid",
+      path: "/admin/covid",
       icon: <BsPhone className="text-[18px]" />,
     },
     {
       title: "Get Technical Help",
-      path: "/help",
+      path: "/admin/help",
       icon: <BsQuestionCircle className="text-[18px]" />,
     },
   ];

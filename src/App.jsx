@@ -1,10 +1,19 @@
 import React, { Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Loading from "./components/Loading";
+import { useAuth } from "./context/AuthContext";
 
 // Lazy Loading Layouts
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
 const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
+const MemberLayout = React.lazy(() => import("./layouts/MemberLayout"));
+
+// Guest Pages
+const GuestLayout = React.lazy(() => import("./layouts/GuestLayout"));
+const GuestPage = React.lazy(() => import("./pages/guest/GuestPage"));
+const Kemitraan = React.lazy(() => import("./pages/guest/Kemitraan"));
+const KatalogProduk = React.lazy(() => import("./pages/guest/KatalogProduk"));
+const KontakKami = React.lazy(() => import("./pages/guest/KontakKami"));
 
 // Lazy Loading Pages (Dashboard & CRM IDIC)
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
@@ -22,27 +31,56 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 
+// Lazy Loading Member Pages
+const MemberDashboard = React.lazy(() => import("./pages/member/MemberDashboard"));
+const MemberProfile = React.lazy(() => import("./pages/member/MemberProfile"));
+const MemberRiwayat = React.lazy(() => import("./pages/member/MemberRiwayat"));
+const MemberLoyalty = React.lazy(() => import("./pages/member/MemberLoyalty"));
+const MemberResep = React.lazy(() => import("./pages/member/MemberResep"));
+
 // Error Pages
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 
 function App() {
+  const { currentUser } = useAuth();
+
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-   
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/segmentation" element={<Segmentation />} />
-          <Route path="/interactions" element={<Interactions />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/reports" element={<Reports />} />
+        
+        {/* ===== GUEST ROUTE (ROOT) ===== */}
+        <Route element={<GuestLayout />}>
+          <Route 
+            path="/" 
+            element={
+              !currentUser ? <GuestPage /> :
+              currentUser.role === "member" ? <Navigate to="/member" replace /> :
+              <Navigate to="/admin" replace />
+            } 
+          />
+          <Route path="/kemitraan" element={<Kemitraan />} />
+          <Route path="/katalog-produk" element={<KatalogProduk />} />
+          <Route path="/kontak-kami" element={<KontakKami />} />
+        </Route>
+
+        {/* ===== ADMIN ROUTES (MainLayout) ===== */}
+        <Route 
+          path="/admin"
+          element={
+            (!currentUser || currentUser.role === "member") ? <Navigate to="/login" replace /> : <MainLayout />
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="customers" element={<Customers />} />
+          <Route path="segmentation" element={<Segmentation />} />
+          <Route path="interactions" element={<Interactions />} />
+          <Route path="services" element={<Services />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="reports" element={<Reports />} />
           
-          {/* Error Route Handling di dalam Layout Utama */}
           <Route
-            path="/error-401"
+            path="error-401"
             element={
               <ErrorPage
                 code="401"
@@ -51,15 +89,33 @@ function App() {
               />
             }
           />
-          
         </Route>
 
-        {/* Public Routes (Menggunakan AuthLayout Navy) */}
+        {/* ===== MEMBER ROUTES (MemberLayout) ===== */}
+        <Route
+          path="/member"
+          element={
+            (!currentUser || currentUser.role !== "member") ? <Navigate to="/login" replace /> : <MemberLayout />
+          }
+        >
+          <Route index element={<MemberDashboard />} />
+          <Route path="profile" element={<MemberProfile />} />
+          <Route path="riwayat" element={<MemberRiwayat />} />
+          <Route path="loyalty" element={<MemberLoyalty />} />
+          <Route path="resep" element={<MemberResep />} />
+        </Route>
+
+        {/* ===== AUTH ROUTES ===== */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={
+            currentUser ? (
+              currentUser.role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
+            ) : <Login />
+          } />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot" element={<Forgot />} />
         </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
