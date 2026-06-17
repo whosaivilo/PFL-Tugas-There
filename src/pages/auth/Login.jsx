@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ImSpinner2 } from "react-icons/im";
 import { BsExclamationCircleFill, BsApple, BsShieldLock, BsPerson } from "react-icons/bs";
@@ -8,12 +8,29 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { loginMember } = useAuth();
+  const { loginMember, setCurrentUser } = useAuth();
 
   const [role, setRole] = useState("admin"); // "admin" | "member"
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [dataForm, setDataForm] = useState({ username: "", password: "" });
+
+  // Menggunakan useRef untuk mengakses elemen input Username secara langsung
+  const usernameRef = useRef(null);
+
+  // Fokuskan input username otomatis saat komponen pertama kali dimuat atau role berubah
+  useEffect(() => {
+    // Gunakan setTimeout kecil untuk menunggu animasi atau proses render selesai
+    // Ini sangat berguna jika komponen di-load menggunakan lazy loading (Suspense) atau ada CSS animation
+    const timer = setTimeout(() => {
+      if (usernameRef.current) {
+        usernameRef.current.focus();
+      }
+    }, 100);
+
+    // Cleanup function untuk mencegah memory leak
+    return () => clearTimeout(timer);
+  }, [role]);
 
   const handleChange = (e) => {
     setDataForm({ ...dataForm, [e.target.name]: e.target.value });
@@ -40,12 +57,17 @@ export default function Login() {
 
     // ── Admin Login (via dummyjson API) ──
     try {
-      const response = await axios.post("https://dummyjson.com/user/login", {
+      const response = await axios.post("https://dummyjson.com/auth/login", {
         username: dataForm.username,
         password: dataForm.password,
       });
       if (response.status === 200) {
-        navigate("/admin");
+        // Tanpa localStorage: langsung simpan state user ke memory context
+        setCurrentUser({ ...response.data, role: "admin" });
+        // Beri sedikit jeda agar Context React selesai memperbarui state sebelum redirect
+        setTimeout(() => {
+          navigate("/admin");
+        }, 100);
       }
     } catch (err) {
       const message = err.response?.data?.message || err.message || "Gagal terhubung ke server";
@@ -120,17 +142,18 @@ export default function Login() {
         {/* Username / Email */}
         <div>
           <label className="block text-[14px] font-medium text-[#111] mb-2">
-            {role === "member" ? "Username Member" : "Email address"}
+            {role === "member" ? "Username Member" : "Email address / Username"}
           </label>
           <input
             type="text"
             name="username"
+            ref={usernameRef} // Tautkan useRef ke elemen ini
             key={`username-${role}`}
             required
             value={dataForm.username}
             onChange={handleChange}
             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[14px] font-medium outline-none focus:border-[#3c5e2d] focus:ring-1 focus:ring-[#3c5e2d] transition placeholder-gray-300"
-            placeholder={role === "member" ? "Masukkan username kamu" : "Enter your email"}
+            placeholder={role === "member" ? "Masukkan username kamu" : "Enter your email / username"}
           />
         </div>
 

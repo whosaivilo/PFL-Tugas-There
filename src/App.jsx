@@ -43,7 +43,11 @@ const NotFound = React.lazy(() => import("./pages/NotFound"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 
 function App() {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Suspense fallback={<Loading />}>
