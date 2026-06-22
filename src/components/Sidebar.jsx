@@ -53,9 +53,9 @@ export default function Sidebar() {
     },
 
     {
-      title: "Application Settings",
-      path: "/admin/settings",
-      icon: <BsGear className="text-[18px]" />,
+      title: "Data Pengguna",
+      path: "/admin/users",
+      icon: <BsPeople className="text-[18px]" />,
       isFirstInGroup: true,
     },
     {

@@ -22,9 +22,10 @@ const Segmentation = React.lazy(() => import("./pages/Segmentation")); // Tahap 
 const Interactions = React.lazy(() => import("./pages/Interactions")); // Tahap Interact
 const Services = React.lazy(() => import("./pages/Services"));         // Tahap Customize
 
-// Lazy Loading Pages (Inventory & Reports)
+// Lazy Loading Pages (Inventory, Reports, & Users)
 const Inventory = React.lazy(() => import("./pages/Inventory"));
 const Reports = React.lazy(() => import("./pages/Reports"));
+const Users = React.lazy(() => import("./pages/Users"));
 
 // Lazy Loading Auth Pages
 const Login = React.lazy(() => import("./pages/auth/Login"));
@@ -82,6 +83,7 @@ function App() {
           <Route path="services" element={<Services />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="users" element={<Users />} />
           
           <Route
             path="error-401"

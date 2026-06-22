@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ImSpinner2 } from "react-icons/im";
 import { BsExclamationCircleFill, BsApple, BsShieldLock, BsPerson } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import axios from 'axios';
+import { usersAPI } from '../../services/usersAPI';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Login() {
@@ -42,36 +42,33 @@ export default function Login() {
     setLoading(true);
     setErrorMsg("");
 
-    if (role === "member") {
-      // ── Member Login (lokal dari customersData.json) ──
-      await new Promise((r) => setTimeout(r, 600)); // simulasi delay
-      const result = loginMember(dataForm.username, dataForm.password);
+    // ── Login via Supabase REST API (Untuk Admin & Member) ──
+    try {
+      const result = await usersAPI.loginUser(dataForm.username, dataForm.password);
+      
       if (result.success) {
-        navigate("/member");
+        const userRole = result.user.role;
+
+        // Validasi tambahan: Pastikan role yang login sesuai dengan tab yang sedang dipilih di UI
+        // (opsional, tapi bagus agar member tidak login lewat tab admin dan sebaliknya)
+        if (userRole !== role) {
+          setErrorMsg(`Akun ini terdaftar sebagai ${userRole}, bukan ${role}. Silakan pindah tab.`);
+          setLoading(false);
+          return;
+        }
+
+        // Simpan state user ke memory context
+        setCurrentUser(result.user);
+        
+        // Arahkan ke halaman yang tepat berdasarkan role di database
+        setTimeout(() => {
+          navigate(userRole === "admin" ? "/admin" : "/member");
+        }, 100);
       } else {
         setErrorMsg(result.error);
       }
-      setLoading(false);
-      return;
-    }
-
-    // ── Admin Login (via dummyjson API) ──
-    try {
-      const response = await axios.post("https://dummyjson.com/auth/login", {
-        username: dataForm.username,
-        password: dataForm.password,
-      });
-      if (response.status === 200) {
-        // Tanpa localStorage: langsung simpan state user ke memory context
-        setCurrentUser({ ...response.data, role: "admin" });
-        // Beri sedikit jeda agar Context React selesai memperbarui state sebelum redirect
-        setTimeout(() => {
-          navigate("/admin");
-        }, 100);
-      }
     } catch (err) {
-      const message = err.response?.data?.message || err.message || "Gagal terhubung ke server";
-      setErrorMsg(String(message));
+      setErrorMsg("Gagal terhubung ke server Supabase.");
     } finally {
       setLoading(false);
     }
