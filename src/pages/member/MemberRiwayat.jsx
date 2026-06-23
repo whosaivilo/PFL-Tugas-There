@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+
 import { BsBagCheck, BsChatDots, BsHeadset, BsExclamationTriangle } from "react-icons/bs";
 import PageHeader from "../../components/PageHeader";
 import Table from "../../components/Table";
 import Badge from "../../components/Badge";
 
 export default function MemberRiwayat() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
   const [activeTab, setActiveTab] = useState("transaksi");
 
   if (!currentUser) return null;

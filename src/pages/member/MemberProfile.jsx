@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+
 import { BsPersonVcard, BsTelephone, BsEnvelope, BsGeoAlt, BsGenderAmbiguous, BsCalendarDate, BsCheckCircleFill, BsToggleOn } from "react-icons/bs";
 import Avatar from "../../components/Avatar";
 import Badge from "../../components/Badge";
@@ -7,7 +7,7 @@ import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
 
 export default function MemberProfile() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
 
   if (!currentUser) return null;
 

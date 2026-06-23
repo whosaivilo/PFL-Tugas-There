@@ -1,5 +1,4 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
 import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort, BsStarFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
@@ -8,7 +7,7 @@ import Table from "../../components/Table";
 import Badge from "../../components/Badge";
 
 export default function MemberDashboard() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
 
   if (!currentUser) return null;
 

@@ -1,11 +1,11 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+
 import { BsCapsule, BsClock, BsCartPlus, BsLaptop, BsPhone, BsGeoAlt, BsCalendarCheck } from "react-icons/bs";
 import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
 
 export default function MemberResep() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
 
   if (!currentUser) return null;
 

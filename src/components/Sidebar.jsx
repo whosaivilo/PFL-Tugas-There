@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   BsGrid1X2,
   BsBoxSeam,
@@ -10,12 +10,21 @@ import {
   BsChatDots,
   BsPhone,
   BsQuestionCircle,
+  BsBoxArrowRight,
 } from "react-icons/bs";
-import { FiMoreVertical, FiChevronDown } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
 import { FaCartPlus } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("pharmacare_user");
+    navigate("/login");
+  };
+
   const menuItems = [
     {
       title: "Dashboard",
@@ -69,7 +78,10 @@ export default function Sidebar() {
       icon: <BsQuestionCircle className="text-[18px]" />,
     },
   ];
-  const adminData = { inisial: "TO", role: "Super Admin" };
+  
+  // Ambil nama dari user yang sedang login, atau fallback ke "Admin"
+  const adminName = currentUser?.name || currentUser?.username || "Admin";
+  const adminInitials = adminName.substring(0, 2).toUpperCase();
 
   return (
     <div className="w-[260px] bg-[#1d232c] text-gray-300 min-h-screen flex flex-col shrink-0 z-20">
@@ -96,7 +108,7 @@ export default function Sidebar() {
                 alt="Theresa Olivia"
               />
               <AvatarFallback className="bg-blue-100 text-blue-700 font-bold">
-                {adminData.inisial}
+                {adminInitials}
               </AvatarFallback>
             </Avatar>
 
@@ -105,14 +117,20 @@ export default function Sidebar() {
           </div>
           <div>
             <h3 className="text-[14px] font-bold text-white leading-tight">
-              Theresa Olivia
+              {adminName}
             </h3>
-            <p className="text-[11px] font-medium text-[#ffcc00]">
-              Super Admin
+            <p className="text-[11px] font-medium text-[#ffcc00] capitalize">
+              {currentUser?.role || "Admin"}
             </p>
           </div>
         </div>
-        <FiMoreVertical className="text-gray-400 cursor-pointer hover:text-white" />
+        <button 
+          onClick={handleLogout}
+          title="Logout"
+          className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-md transition-colors"
+        >
+          <BsBoxArrowRight className="text-xl" />
+        </button>
       </div>
 
       {/* Menu Area dengan NavLink Aktif */}

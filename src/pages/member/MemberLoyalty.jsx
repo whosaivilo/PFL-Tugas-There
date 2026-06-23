@@ -1,10 +1,10 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+
 import { BsGiftFill, BsAwardFill, BsShareFill, BsCopy, BsUnlockFill } from "react-icons/bs";
 import Button from "../../components/Button";
 
 export default function MemberLoyalty() {
-  const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
 
   if (!currentUser) return null;
 

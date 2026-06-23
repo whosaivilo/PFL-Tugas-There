@@ -1,7 +1,12 @@
 import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Loading from "./components/Loading";
-import { useAuth } from "./context/AuthContext";
+
+// Helper function to get current user directly from localStorage
+const getCurrentUser = () => {
+  const savedUser = localStorage.getItem("pharmacare_user");
+  return savedUser ? JSON.parse(savedUser) : null;
+};
 
 // Lazy Loading Layouts
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
@@ -44,12 +49,6 @@ const NotFound = React.lazy(() => import("./pages/NotFound"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 
 function App() {
-  const { currentUser, loading } = useAuth();
-
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
@@ -59,8 +58,8 @@ function App() {
           <Route 
             path="/" 
             element={
-              !currentUser ? <GuestPage /> :
-              currentUser.role === "member" ? <Navigate to="/member" replace /> :
+              !getCurrentUser() ? <GuestPage /> :
+              getCurrentUser().role === "member" ? <Navigate to="/member" replace /> :
               <Navigate to="/admin" replace />
             } 
           />
@@ -73,7 +72,7 @@ function App() {
         <Route 
           path="/admin"
           element={
-            (!currentUser || currentUser.role === "member") ? <Navigate to="/login" replace /> : <MainLayout />
+            (!getCurrentUser() || getCurrentUser().role === "member") ? <Navigate to="/login" replace /> : <MainLayout />
           }
         >
           <Route index element={<Dashboard />} />
@@ -101,7 +100,7 @@ function App() {
         <Route
           path="/member"
           element={
-            (!currentUser || currentUser.role !== "member") ? <Navigate to="/login" replace /> : <MemberLayout />
+            (!getCurrentUser() || getCurrentUser().role !== "member") ? <Navigate to="/login" replace /> : <MemberLayout />
           }
         >
           <Route index element={<MemberDashboard />} />
@@ -114,8 +113,8 @@ function App() {
         {/* ===== AUTH ROUTES ===== */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={
-            currentUser ? (
-              currentUser.role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
+            getCurrentUser() ? (
+              getCurrentUser().role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
             ) : <Login />
           } />
           <Route path="/register" element={<Register />} />

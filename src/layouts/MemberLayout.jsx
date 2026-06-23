@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import {
   BsGrid1X2Fill, BsPerson, BsClockHistory,
   BsGift, BsFileEarmarkMedical, BsBoxArrowRight,
@@ -10,15 +9,15 @@ import { FaHeartPulse } from "react-icons/fa6";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function MemberLayout() {
-  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/member-login");
+    localStorage.removeItem("pharmacare_user");
+    navigate("/login");
   };
 
   const levelBadge = {
