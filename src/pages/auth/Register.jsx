@@ -32,16 +32,10 @@ export default function Register() {
 
     const result = await usersAPI.registerUser(dataForm);
 
-    if (result.success) {
-      setSuccessMsg("Pendaftaran berhasil! Mengarahkan ke halaman login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } else {
-      setErrorMsg(result.error);
-    }
-    
-    setLoading(false);
+  if (result.success) {
+   navigate("/login"); // 1. Kita langsung pindah halaman (Register dihancurkan)
+   setLoading(false);  // 2. React kebingungan! "Lho halamannya kan udah gak ada, kok disuruh matiin loading?"
+}
   };
 
   return (

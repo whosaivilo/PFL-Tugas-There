@@ -48,7 +48,7 @@ export default function Login() {
         
         // Arahkan ke halaman yang tepat berdasarkan role di database
         setTimeout(() => {
-          navigate(userRole === "admin" ? "/admin" : "/member");
+          window.location.href = userRole === "admin" ? "/admin" : "/member";
         }, 100);
       } else {
         setErrorMsg(result.error);

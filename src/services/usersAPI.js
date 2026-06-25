@@ -47,8 +47,6 @@ export const usersAPI = {
         return { success: false, error: "Username sudah dipakai, silakan gunakan username yang lain." };
       }
 
-      // 2. Jika belum dipakai, simpan data ke tabel 'users'
-      // Role default adalah "member" jika tidak dikirim dari form
       const payload = {
         name: data.name,
         username: data.username,

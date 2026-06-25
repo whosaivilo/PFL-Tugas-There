@@ -22,7 +22,7 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("pharmacare_user");
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   const menuItems = [
