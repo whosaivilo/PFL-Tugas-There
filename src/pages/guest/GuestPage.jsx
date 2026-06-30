@@ -81,7 +81,77 @@ export default function GuestPage() {
             </div>
           </div>
         </div>
+      {/* ── AREA MIDDLE: FEATURES & FAQ ── */}
+      {/* Feature Section */}
+      <section id="fitur" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Satu Platform, Semua Kebutuhan Medis</h2>
+            <p className="text-lg text-slate-600">Integrasi penuh dari pemesanan obat hingga sinkronisasi data dengan sistem apoteker kami secara real-time.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Fitur 1 */}
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6">
+                <i className="bi bi-clipboard2-pulse"></i>
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Pantau Riwayat Kesehatan</h3>
+              <p className="text-slate-600 leading-relaxed">Akses riwayat pesanan dan resep secara terpusat untuk pelayanan klinis yang lebih tajam dan akurat.</p>
+            </div>
+
+            {/* Fitur 2 */}
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+              <div className="w-14 h-14 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-2xl mb-6">
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Terhubung dengan Apoteker</h3>
+              <p className="text-slate-600 leading-relaxed">Setiap pesanan Anda langsung tersinkronisasi real-time ke sistem dashboard Apoteker untuk diproses tanpa delay.</p>
+            </div>
+
+            {/* Fitur 3 */}
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+              <div className="w-14 h-14 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-2xl mb-6">
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Loyalty Points & Tiering</h3>
+              <p className="text-slate-600 leading-relaxed">Sistem poin cerdas yang otomatis bertambah setiap transaksi dan dapat ditukar dengan diskon khusus apotek.</p>
+            </div>
+          </div>
+        </div>
       </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 bg-slate-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Pertanyaan yang Sering Diajukan</h2>
+            <p className="text-slate-600">Semua yang perlu Anda ketahui tentang layanan CRM PharmaCare.</p>
+          </div>
+          
+          <div className="space-y-4">
+            <details className="group bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer open:border-teal-500 transition-all">
+              <summary className="text-lg font-bold text-slate-800 marker:text-teal-600 flex justify-between items-center outline-none">
+                Apakah pendaftaran member ini gratis?
+              </summary>
+              <div className="mt-4 text-slate-600 leading-relaxed border-t pt-4">
+                Ya, 100% Gratis! Anda tidak perlu membayar biaya pendaftaran atau langganan bulanan. Cukup daftar dan langsung nikmati keuntungannya.
+              </div>
+            </details>
+            
+            <details className="group bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer open:border-teal-500 transition-all">
+              <summary className="text-lg font-bold text-slate-800 marker:text-teal-600 flex justify-between items-center outline-none">
+                Bagaimana cara mendapatkan dan menggunakan Poin Loyalty?
+              </summary>
+              <div className="mt-4 text-slate-600 leading-relaxed border-t pt-4">
+                Poin akan otomatis bertambah ke akun Anda setiap kali transaksi obat diselesaikan. Poin tersebut dapat Anda tukarkan sebagai potongan harga langsung saat checkout berikutnya!
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
