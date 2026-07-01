@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ImSpinner2 } from "react-icons/im";
-
-import { usersAPI } from '../../services/usersAPI';
 import { BsExclamationCircleFill, BsCheckCircleFill } from "react-icons/bs";
+import { supabase } from '../../lib/supabase'; // Import supabase client
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,6 +12,7 @@ export default function Register() {
   const [dataForm, setDataForm] = useState({
     name: "",
     username: "",
+    email: "",
     password: ""
   });
 
@@ -30,18 +30,39 @@ export default function Register() {
     setErrorMsg("");
     setSuccessMsg("");
 
-    const result = await usersAPI.registerUser(dataForm);
+    try {
+      // Panggil Supabase SignUp
+      const { data, error } = await supabase.auth.signUp({
+        email: dataForm.email,
+        password: dataForm.password,
+        options: {
+          data: {
+            full_name: dataForm.name,
+            username: dataForm.username,
+            role: "member" // default role untuk pendaftaran terbuka
+          }
+        }
+      });
 
-  if (result.success) {
-   navigate("/login"); // 1. Kita langsung pindah halaman (Register dihancurkan)
-   setLoading(false);  // 2. React kebingungan! "Lho halamannya kan udah gak ada, kok disuruh matiin loading?"
-}
+      if (error) {
+        setErrorMsg(error.message);
+      } else {
+        setSuccessMsg("Pendaftaran berhasil! Mengarahkan ke Dashboard...");
+        // Jika berhasil, Supabase akan men-trigger login otomatis (jika auto-confirm email aktif)
+        // atau AuthContext akan memproses sesi.
+        setTimeout(() => navigate('/member'), 2000);
+      }
+    } catch (err) {
+      setErrorMsg("Terjadi kesalahan koneksi.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-2 text-center">Create an Account</h2>
-      <p className="text-sm text-gray-500 text-center mb-6">Bergabunglah untuk mengelola apotek Anda</p>
+    <div className="animate-modal">
+      <h2 className="text-[28px] md:text-[32px] font-bold text-[#111] mb-2 text-center tracking-tight">Create an Account</h2>
+      <p className="text-[14px] text-gray-500 text-center mb-6 font-medium">Bergabunglah dengan CRM PharmaCare</p>
 
       {/* Alert Error */}
       {errorMsg && (
@@ -61,25 +82,29 @@ export default function Register() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-          <input type="text" name="name" required value={dataForm.name} onChange={handleChange} className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="John Doe" />
+          <label className="block text-[13px] font-medium text-gray-700 mb-1.5">Full Name</label>
+          <input type="text" name="name" required value={dataForm.name} onChange={handleChange} className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="John Doe" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
-          <input type="text" name="username" required value={dataForm.username} onChange={handleChange} className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="johndoe123" />
+          <label className="block text-[13px] font-medium text-gray-700 mb-1.5">Username</label>
+          <input type="text" name="username" required value={dataForm.username} onChange={handleChange} className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="johndoe123" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input type="password" name="password" required value={dataForm.password} onChange={handleChange} className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="********" />
+          <label className="block text-[13px] font-medium text-gray-700 mb-1.5">Email</label>
+          <input type="email" name="email" required value={dataForm.email} onChange={handleChange} className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="john@example.com" />
+        </div>
+        <div>
+          <label className="block text-[13px] font-medium text-gray-700 mb-1.5">Password</label>
+          <input type="password" name="password" required value={dataForm.password} onChange={handleChange} className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl text-[14px] outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="********" />
         </div>
 
-        <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 flex justify-center mt-2">
-          {loading ? <ImSpinner2 className="animate-spin text-xl" /> : "Register"}
+        <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-300 flex justify-center mt-4">
+          {loading ? <ImSpinner2 className="animate-spin text-xl" /> : "Register Account"}
         </button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 mt-6">
-        Sudah punya akun? <Link to="/login" className="text-blue-600 font-semibold hover:underline">Login di sini</Link>
+      <p className="text-center text-[13px] font-medium text-gray-600 mt-6">
+        Sudah punya akun? <Link to="/login" className="text-blue-600 font-bold hover:underline">Login di sini</Link>
       </p>
     </div>
   );

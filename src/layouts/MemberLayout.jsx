@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   BsGrid1X2Fill, BsPerson, BsClockHistory,
   BsGift, BsFileEarmarkMedical, BsBoxArrowRight,
-  BsChevronDown, BsBell,
+  BsChevronDown, BsBell, BsCart3
 } from "react-icons/bs";
 import { FaHeartPulse } from "react-icons/fa6";
 import { Toaster } from "@/components/ui/sonner";
@@ -28,6 +28,7 @@ export default function MemberLayout() {
 
   const navItems = [
     { title: "Dashboard",          path: "/member",            icon: <BsGrid1X2Fill />,          end: true },
+    { title: "Katalog Obat",       path: "/member/katalog",    icon: <BsCart3 /> },
     { title: "Riwayat",            path: "/member/riwayat",    icon: <BsClockHistory /> },
     { title: "Loyalty & Reward",   path: "/member/loyalty",    icon: <BsGift /> },
     { title: "Resep & Pengingat",  path: "/member/resep",      icon: <BsFileEarmarkMedical /> },

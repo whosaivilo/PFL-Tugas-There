@@ -5,33 +5,7 @@ import { BsArrowRightShort, BsHeartPulseFill } from "react-icons/bs";
 export default function GuestPage() {
   return (
     <div className="bg-slate-50 min-h-screen font-sans">
-      {/* ── NAVBAR (Area TOP) ── */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white">
-                <BsHeartPulseFill />
-              </div>
-              <span className="font-bold text-xl text-teal-900 tracking-tight">PharmaCare CRM</span>
-            </div>
-            <div className="hidden md:flex space-x-8">
-              <a href="#fitur" className="text-gray-500 hover:text-teal-600 font-medium transition">Fitur Utama</a>
-              <a href="#solusi" className="text-gray-500 hover:text-teal-600 font-medium transition">Keuntungan Member</a>
-              <a href="#faq" className="text-gray-500 hover:text-teal-600 font-medium transition">FAQ</a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/login" className="text-teal-600 font-semibold hover:text-teal-700 transition">
-                Masuk
-              </Link>
-              <Link to="/register" className="bg-teal-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-teal-700 transition shadow-md shadow-teal-500/20">
-                Daftar Gratis
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      {/* Catatan: Navbar global sudah di-handle oleh GuestLayout */}
       {/* ── HERO SECTION (Area TOP) ── */}
       <section className="pt-32 pb-20 md:pt-40 md:pb-28 px-4 overflow-hidden relative">
         {/* Background Ornaments */}
@@ -81,6 +55,8 @@ export default function GuestPage() {
             </div>
           </div>
         </div>
+      </section>
+      
       {/* ── AREA MIDDLE: FEATURES & FAQ ── */}
       {/* Feature Section */}
       <section id="fitur" className="py-24 bg-white">
@@ -150,6 +126,8 @@ export default function GuestPage() {
             </details>
           </div>
         </div>
+      </section>
+      
       {/* ── AREA BOTTOM: FINAL CTA & FOOTER ── */}
       {/* CTA Section dengan Form Registrasi Langsung */}
       <section id="daftar" className="py-24 bg-teal-600 relative overflow-hidden">
@@ -200,56 +178,7 @@ export default function GuestPage() {
         </div>
       </section>
 
-      {/* Footer (Jangkar Kredibilitas) */}
-      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white">
-                <BsHeartPulseFill />
-              </div>
-              <span className="font-bold text-xl text-white tracking-tight">PharmaCare</span>
-            </div>
-            <p className="text-sm leading-relaxed mb-4">Platform manajemen apotek terpadu yang memadukan layanan kasir, inventory, dan CRM cerdas untuk pelayanan pasien yang maksimal.</p>
-          </div>
-          
-          <div>
-            <h4 className="text-white font-bold mb-4">Produk</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-teal-400 transition">Sistem Kasir Apotek</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition">Manajemen Resep</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition">Loyalty CRM</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-4">Perusahaan</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-teal-400 transition">Tentang Kami</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition">Kemitraan</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition">Kontak</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-4">Keamanan & Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-teal-400 transition">Kebijakan Privasi</a></li>
-              <li><a href="#" className="hover:text-teal-400 transition">Syarat & Ketentuan</a></li>
-              <li><span className="inline-block px-3 py-1 bg-slate-800 rounded border border-slate-700 text-xs font-bold text-slate-300 mt-2">Tersertifikasi HIPAA</span></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 text-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} PharmaCare Technology. All rights reserved.</p>
-          <div className="mt-4 md:mt-0 flex gap-4">
-            <a href="#" className="text-slate-500 hover:text-white transition"><i className="bi bi-facebook"></i></a>
-            <a href="#" className="text-slate-500 hover:text-white transition"><i className="bi bi-twitter"></i></a>
-            <a href="#" className="text-slate-500 hover:text-white transition"><i className="bi bi-instagram"></i></a>
-          </div>
-        </div>
-      </footer>
+      {/* Catatan: Footer global sudah di-handle oleh GuestLayout */}
 
     </div>
   );

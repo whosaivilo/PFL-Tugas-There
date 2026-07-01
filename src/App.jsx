@@ -1,12 +1,7 @@
 import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Loading from "./components/Loading";
-
-// Helper function to get current user directly from localStorage
-const getCurrentUser = () => {
-  const savedUser = localStorage.getItem("pharmacare_user");
-  return savedUser ? JSON.parse(savedUser) : null;
-};
+import { useAuth } from "./contexts/AuthContext"; // Import AuthContext
 
 // Lazy Loading Layouts
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
@@ -49,6 +44,8 @@ const NotFound = React.lazy(() => import("./pages/NotFound"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 
 function App() {
+  const { user, role } = useAuth(); // Ambil state login dari Supabase Context
+
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
@@ -58,8 +55,8 @@ function App() {
           <Route 
             path="/" 
             element={
-              !getCurrentUser() ? <GuestPage /> :
-              getCurrentUser().role === "member" ? <Navigate to="/member" replace /> :
+              !user ? <GuestPage /> :
+              role === "member" ? <Navigate to="/member" replace /> :
               <Navigate to="/admin" replace />
             } 
           />
@@ -72,7 +69,7 @@ function App() {
         <Route 
           path="/admin"
           element={
-            (!getCurrentUser() || getCurrentUser().role === "member") ? <Navigate to="/login" replace /> : <MainLayout />
+            (!user || role === "member") ? <Navigate to="/login" replace /> : <MainLayout />
           }
         >
           <Route index element={<Dashboard />} />
@@ -100,11 +97,12 @@ function App() {
         <Route
           path="/member"
           element={
-            (!getCurrentUser() || getCurrentUser().role !== "member") ? <Navigate to="/login" replace /> : <MemberLayout />
+            (!user || role !== "member") ? <Navigate to="/login" replace /> : <MemberLayout />
           }
         >
           <Route index element={<MemberDashboard />} />
           <Route path="profile" element={<MemberProfile />} />
+          <Route path="katalog" element={<KatalogProduk />} />
           <Route path="riwayat" element={<MemberRiwayat />} />
           <Route path="loyalty" element={<MemberLoyalty />} />
           <Route path="resep" element={<MemberResep />} />
@@ -113,11 +111,15 @@ function App() {
         {/* ===== AUTH ROUTES ===== */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={
-            getCurrentUser() ? (
-              getCurrentUser().role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
+            user ? (
+              role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
             ) : <Login />
           } />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={
+            user ? (
+              role === "member" ? <Navigate to="/member" replace /> : <Navigate to="/admin" replace />
+            ) : <Register />
+          } />
           <Route path="/forgot" element={<Forgot />} />
         </Route>
 

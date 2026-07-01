@@ -1,28 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ImSpinner2 } from "react-icons/im";
-import { BsExclamationCircleFill, BsApple, BsShieldLock, BsPerson } from "react-icons/bs";
+import { BsExclamationCircleFill, BsApple } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import { usersAPI } from '../../services/usersAPI';
+import { supabase } from '../../lib/supabase'; // Import supabase client
 
 export default function Login() {
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [dataForm, setDataForm] = useState({ username: "", password: "" });
+  const [dataForm, setDataForm] = useState({ email: "", password: "" });
 
-  // Menggunakan useRef untuk mengakses elemen input Username secara langsung
-  const usernameRef = useRef(null);
+  const emailRef = useRef(null);
 
-  // Fokuskan input username otomatis saat komponen pertama kali dimuat
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (usernameRef.current) {
-        usernameRef.current.focus();
+      if (emailRef.current) {
+        emailRef.current.focus();
       }
     }, 100);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -36,25 +31,19 @@ export default function Login() {
     setLoading(true);
     setErrorMsg("");
 
-    // ── Login via Supabase REST API (Untuk Admin & Member) ──
     try {
-      const result = await usersAPI.loginUser(dataForm.username, dataForm.password);
-      
-      if (result.success) {
-        const userRole = result.user.role;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: dataForm.email,
+        password: dataForm.password,
+      });
 
-        // Simpan state user ke localStorage
-        localStorage.setItem("pharmacare_user", JSON.stringify(result.user));
-        
-        // Arahkan ke halaman yang tepat berdasarkan role di database
-        setTimeout(() => {
-          window.location.href = userRole === "admin" ? "/admin" : "/member";
-        }, 100);
-      } else {
-        setErrorMsg(result.error);
+      if (error) {
+        setErrorMsg(error.message);
       }
+      // Jika berhasil, AuthContext akan mendeteksi session baru dan 
+      // otomatis me-redirect via App.jsx
     } catch (err) {
-      setErrorMsg("Gagal terhubung ke server Supabase.");
+      setErrorMsg("Terjadi kesalahan pada jaringan.");
     } finally {
       setLoading(false);
     }
@@ -62,8 +51,6 @@ export default function Login() {
 
   return (
     <div className="animate-modal">
-
-      {/* ── HEADING ───────────────────────────────── */}
       <h1 className="text-[32px] md:text-[36px] font-semi-bold text-[#111] tracking-tight leading-none mb-3">
         Welcome back!
       </h1>
@@ -71,12 +58,10 @@ export default function Login() {
         Enter your Credentials to access your account
       </p>
 
-      {/* ── INFO HINT ─────────────────────────────── */}
       <div className="mb-6 p-3 bg-blue-50 border border-blue-100 rounded-xl text-[12px] text-blue-700 font-medium">
-        💡 Sistem akan otomatis mengarahkanmu ke portal Admin atau Member sesuai peran akunmu.
+        💡 Sistem menggunakan autentikasi Supabase. Silakan gunakan <strong>Email</strong> yang terdaftar.
       </div>
 
-      {/* ── ERROR ALERT ───────────────────────────── */}
       {errorMsg && (
         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-6 flex items-center text-[14px] font-medium animate-pulse">
           <BsExclamationCircleFill className="mr-2 text-lg shrink-0" />
@@ -84,27 +69,23 @@ export default function Login() {
         </div>
       )}
 
-      {/* ── FORM ──────────────────────────────────── */}
       <form onSubmit={handleSubmit} className="space-y-6">
-
-        {/* Username */}
         <div>
           <label className="block text-[14px] font-medium text-[#111] mb-2">
-            Username
+            Email
           </label>
           <input
-            type="text"
-            name="username"
-            ref={usernameRef} // Tautkan useRef ke elemen ini
+            type="email"
+            name="email"
+            ref={emailRef}
             required
-            value={dataForm.username}
+            value={dataForm.email}
             onChange={handleChange}
             className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[14px] font-medium outline-none focus:border-[#3c5e2d] focus:ring-1 focus:ring-[#3c5e2d] transition placeholder-gray-300"
-            placeholder="Enter your username"
+            placeholder="Enter your email"
           />
         </div>
 
-        {/* Password */}
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="block text-[14px] font-medium text-[#111]">Password</label>
@@ -123,7 +104,6 @@ export default function Login() {
           />
         </div>
 
-        {/* Remember */}
         <div className="flex items-center pt-1">
           <input
             type="checkbox"
@@ -135,7 +115,6 @@ export default function Login() {
           </label>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
@@ -150,7 +129,6 @@ export default function Login() {
         </button>
       </form>
 
-      {/* ── DIVIDER + SOCIAL ── */}
       <div className="flex items-center my-6">
         <div className="flex-1 border-t border-gray-200"></div>
         <span className="px-4 text-[11px] font-semibold text-[#888]">Or</span>
@@ -167,7 +145,6 @@ export default function Login() {
         </button>
       </div>
 
-      {/* ── FOOTER ────────────────────────────────── */}
       <div className="text-center mt-4">
         <p className="text-[14px] font-medium text-[#222]">
           Don't have an account?{" "}

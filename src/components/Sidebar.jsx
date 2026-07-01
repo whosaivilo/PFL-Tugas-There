@@ -29,6 +29,7 @@ export default function Sidebar() {
     {
       title: "Dashboard",
       path: "/admin",
+      end: true,
       icon: <BsGrid1X2 className="text-[18px]" />,
     },
     {
@@ -37,45 +38,25 @@ export default function Sidebar() {
       icon: <BsBoxSeam className="text-[18px]" />,
     },
     {
-      title: "Reports",
-      path: "/admin/reports",
-      icon: <BsGraphUp className="text-[18px]" />,
+      title: "Daftar Pasien",
+      path: "/admin/customers",
+      icon: <BsPeople className="text-[18px]" />,
     },
     {
       title: "Segmentasi",
       path: "/admin/segmentation",
       icon: <BsGear className="text-[18px]" />,
-      isLastInGroup: true,
-    },
-
-    {
-      title: "Data Pasien",
-      path: "/admin/customers",
-      icon: <BsPeople className="text-[18px]" />,
-      isFirstInGroup: true,
     },
     {
       title: "Interaksi",
       path: "/admin/interactions",
       icon: <BsChatDots className="text-[18px]" />,
-      isLastInGroup: true,
     },
-
     {
       title: "Data Pengguna",
       path: "/admin/users",
       icon: <BsPeople className="text-[18px]" />,
-      isFirstInGroup: true,
-    },
-    {
-      title: "Covid -19",
-      path: "/admin/covid",
-      icon: <BsPhone className="text-[18px]" />,
-    },
-    {
-      title: "Get Technical Help",
-      path: "/admin/help",
-      icon: <BsQuestionCircle className="text-[18px]" />,
+      isLastInGroup: true,
     },
   ];
   
@@ -146,6 +127,7 @@ export default function Sidebar() {
             >
               <NavLink
                 to={menu.path}
+                end={menu.end}
                 className={({ isActive }) =>
                   `flex items-center justify-between px-6 py-3 transition-colors ${
                     isActive
