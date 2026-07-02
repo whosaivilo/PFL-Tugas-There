@@ -11,7 +11,6 @@ const MemberLayout = React.lazy(() => import("./layouts/MemberLayout"));
 // Guest Pages
 const GuestLayout = React.lazy(() => import("./layouts/GuestLayout"));
 const GuestPage = React.lazy(() => import("./pages/guest/GuestPage"));
-const Kemitraan = React.lazy(() => import("./pages/guest/Kemitraan"));
 const KatalogProduk = React.lazy(() => import("./pages/guest/KatalogProduk"));
 const KontakKami = React.lazy(() => import("./pages/guest/KontakKami"));
 
@@ -61,7 +60,6 @@ function App() {
               <Navigate to="/admin" replace />
             } 
           />
-          <Route path="/kemitraan" element={<Kemitraan />} />
           <Route path="/katalog-produk" element={<KatalogProduk />} />
           <Route path="/kontak-kami" element={<KontakKami />} />
         </Route>
