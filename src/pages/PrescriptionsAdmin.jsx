@@ -16,8 +16,7 @@ export default function PrescriptionsAdmin() {
       .select(`
         *,
         profiles (
-          full_name,
-          phone
+          full_name
         )
       `)
       .order("created_at", { ascending: false });
