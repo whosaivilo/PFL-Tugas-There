@@ -20,7 +20,7 @@ export default function GuestLayout() {
         </Link>
 
         <div className="hidden lg:flex items-center gap-8 text-[15px] font-bold text-gray-700">
-          <Link to="/kemitraan" className="hover:text-orange-500 transition">Kemitraan</Link>
+          <Link to="/" className="hover:text-orange-500 transition">Beranda</Link>
           <Link to="/katalog-produk" className="hover:text-orange-500 transition">Katalog Produk</Link>
           <Link to="/kontak-kami" className="hover:text-orange-500 transition">Kontak Kami</Link>
         </div>
@@ -58,7 +58,6 @@ export default function GuestLayout() {
             <h4 className="font-bold text-lg mb-6 text-gray-800">Perusahaan</h4>
             <ul className="text-sm text-gray-500 space-y-3">
               <li><Link to="/" className="hover:text-orange-500 transition">Tentang Kami</Link></li>
-              <li><Link to="/kemitraan" className="hover:text-orange-500 transition">Kemitraan Korporasi</Link></li>
               <li><a href="#" className="hover:text-orange-500 transition">Syarat & Ketentuan</a></li>
               <li><a href="#" className="hover:text-orange-500 transition">Kebijakan Privasi</a></li>
             </ul>

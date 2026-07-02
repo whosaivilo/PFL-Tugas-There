@@ -24,6 +24,7 @@ const Services = React.lazy(() => import("./pages/Services"));         // Tahap 
 
 // Lazy Loading Pages (Inventory, Reports, & Users)
 const Inventory = React.lazy(() => import("./pages/Inventory"));
+const Orders = React.lazy(() => import("./pages/Orders")); // PRD 2
 const Reports = React.lazy(() => import("./pages/Reports"));
 const Users = React.lazy(() => import("./pages/Users"));
 
@@ -78,6 +79,7 @@ function App() {
           <Route path="interactions" element={<Interactions />} />
           <Route path="services" element={<Services />} />
           <Route path="inventory" element={<Inventory />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="reports" element={<Reports />} />
           <Route path="users" element={<Users />} />
           

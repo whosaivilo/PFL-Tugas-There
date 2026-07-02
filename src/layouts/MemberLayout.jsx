@@ -3,10 +3,11 @@ import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   BsGrid1X2Fill, BsPerson, BsClockHistory,
   BsGift, BsFileEarmarkMedical, BsBoxArrowRight,
-  BsChevronDown, BsBell, BsCart3
+  BsChevronDown, BsBell, BsCart3, BsHouseDoor
 } from "react-icons/bs";
 import { FaHeartPulse } from "react-icons/fa6";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "../lib/supabase";
 
 export default function MemberLayout() {
   const navigate = useNavigate();
@@ -15,7 +16,8 @@ export default function MemberLayout() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem("pharmacare_user");
     window.location.href = "/login";
   };
@@ -27,6 +29,7 @@ export default function MemberLayout() {
   };
 
   const navItems = [
+    { title: "Beranda Utama",      path: "/",                  icon: <BsHouseDoor />,            end: true },
     { title: "Dashboard",          path: "/member",            icon: <BsGrid1X2Fill />,          end: true },
     { title: "Katalog Obat",       path: "/member/katalog",    icon: <BsCart3 /> },
     { title: "Riwayat",            path: "/member/riwayat",    icon: <BsClockHistory /> },

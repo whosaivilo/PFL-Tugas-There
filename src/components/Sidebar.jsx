@@ -15,12 +15,14 @@ import {
 import { FiChevronDown } from "react-icons/fi";
 import { FaCartPlus } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { supabase } from "../lib/supabase";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem("pharmacare_user");
     window.location.href = "/login";
   };
@@ -36,6 +38,11 @@ export default function Sidebar() {
       title: "Inventory",
       path: "/admin/inventory",
       icon: <BsBoxSeam className="text-[18px]" />,
+    },
+    {
+      title: "Daftar Pesanan",
+      path: "/admin/orders",
+      icon: <FaCartPlus className="text-[18px]" />,
     },
     {
       title: "Daftar Pasien",
