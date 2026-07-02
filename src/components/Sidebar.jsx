@@ -45,24 +45,14 @@ export default function Sidebar() {
       icon: <FaCartPlus className="text-[18px]" />,
     },
     {
-      title: "Daftar Pasien",
-      path: "/admin/customers",
-      icon: <BsPeople className="text-[18px]" />,
-    },
-    {
       title: "Segmentasi",
       path: "/admin/segmentation",
       icon: <BsGear className="text-[18px]" />,
     },
     {
-      title: "Interaksi",
-      path: "/admin/interactions",
+      title: "Resep Masuk",
+      path: "/admin/prescriptions",
       icon: <BsChatDots className="text-[18px]" />,
-    },
-    {
-      title: "Data Pengguna",
-      path: "/admin/users",
-      icon: <BsPeople className="text-[18px]" />,
       isLastInGroup: true,
     },
   ];

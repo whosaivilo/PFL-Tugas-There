@@ -93,18 +93,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-full animate-in fade-in duration-500">
-      {/* Header Dashboard */}
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h2 className="text-[24px] font-bold text-gray-800 mb-1">Dashboard Analytics</h2>
-          <p className="text-[14px] font-medium text-gray-600">A quick overview of real-time transactions.</p>
-        </div>
-        <button className="flex items-center gap-2 bg-white border border-gray-300 text-gray-800 px-4 py-2.5 rounded text-[14px] font-medium hover:bg-gray-50 shadow-sm transition-colors">
-          Download Report
-          <FiChevronDown className="text-gray-600" />
-        </button>
-      </div>
+    <div className="font-poppins">
     
       {/* 4 KOTAK STATISTIK ATAS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 relative">

@@ -26,6 +26,7 @@ const Inventory = React.lazy(() => import("./pages/Inventory"));
 const Orders = React.lazy(() => import("./pages/Orders")); // PRD 2
 const Reports = React.lazy(() => import("./pages/Reports"));
 const Users = React.lazy(() => import("./pages/Users"));
+const PrescriptionsAdmin = React.lazy(() => import("./pages/PrescriptionsAdmin"));
 
 // Lazy Loading Auth Pages
 const Login = React.lazy(() => import("./pages/auth/Login"));
@@ -80,6 +81,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="reports" element={<Reports />} />
           <Route path="users" element={<Users />} />
+          <Route path="prescriptions" element={<PrescriptionsAdmin />} />
           
           <Route
             path="error-401"

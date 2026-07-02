@@ -1,14 +1,35 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import { BsGiftFill, BsAwardFill, BsShareFill, BsCopy, BsUnlockFill } from "react-icons/bs";
 import Button from "../../components/Button";
+import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function MemberLoyalty() {
-  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
+  const { user } = useAuth();
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!currentUser) return null;
+  useEffect(() => {
+    if (!user) return;
+    const fetchProfile = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("loyalty_points, member_level")
+        .eq("id", user.id)
+        .single();
+      
+      if (!error && data) {
+        setProfile(data);
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, [user]);
 
-  const points = currentUser.loyaltyPoints || 0;
+  if (loading || !profile) return <div className="p-8 text-center text-gray-500">Memuat data loyalitas...</div>;
+
+  const points = profile.loyalty_points || 0;
+  const memberLevel = profile.member_level || "Silver";
   
   // Fake reward catalog based on points
   const rewards = [
@@ -45,11 +66,11 @@ export default function MemberLoyalty() {
 
         <div className="relative z-10 w-full md:w-auto bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col items-center justify-center min-w-[200px]">
           <BsAwardFill className={`text-5xl mb-3 ${
-            currentUser.memberLevel === 'Platinum' ? 'text-violet-400' :
-            currentUser.memberLevel === 'Gold' ? 'text-yellow-400' : 'text-gray-300'
+            memberLevel === 'Platinum' ? 'text-violet-400' :
+            memberLevel === 'Gold' ? 'text-yellow-400' : 'text-gray-300'
           }`} />
           <p className="text-xs text-gray-300 uppercase tracking-widest font-bold mb-1">Level Anda</p>
-          <h3 className="text-2xl font-bold text-white">{currentUser.memberLevel}</h3>
+          <h3 className="text-2xl font-bold text-white">{memberLevel}</h3>
         </div>
       </div>
 
@@ -71,10 +92,10 @@ export default function MemberLoyalty() {
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Kode Referral Kamu</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 bg-gray-50 border border-gray-200 py-3 px-4 rounded-xl text-lg font-mono font-bold text-gray-800 tracking-wider text-center">
-                {currentUser.account?.referralCode || "N/A"}
+                {user?.id ? user.id.substring(0, 8).toUpperCase() : "N/A"}
               </div>
               <button 
-                onClick={() => handleCopy(currentUser.account?.referralCode)}
+                onClick={() => handleCopy(user?.id ? user.id.substring(0, 8).toUpperCase() : "")}
                 className="w-14 h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-xl flex items-center justify-center transition shrink-0"
               >
                 <BsCopy />
