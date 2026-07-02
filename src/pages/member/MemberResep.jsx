@@ -8,7 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 export default function MemberResep() {
   const { user } = useAuth();
   const [prescriptions, setPrescriptions] = useState([]);
-  const [imageUrl, setImageUrl] = useState("");
+  const [file, setFile] = useState(null);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -34,23 +34,55 @@ export default function MemberResep() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!imageUrl.trim()) {
-      alert("Masukkan link gambar resep!");
+    if (!file) {
+      alert("Harap pilih foto resep terlebih dahulu!");
       return;
     }
-    setLoading(true);
-    const { error } = await supabase
-      .from("prescriptions")
-      .insert([{ user_id: user.id, image_url: imageUrl, notes }]);
     
-    setLoading(false);
-    if (error) {
-      alert("Gagal mengirim resep: " + error.message);
-    } else {
-      alert("Resep berhasil dikirim dan sedang diverifikasi Admin!");
-      setImageUrl("");
+    setLoading(true);
+    
+    try {
+      // 1. Generate unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // 2. Upload file to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('prescriptions')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // 3. Get Public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('prescriptions')
+        .getPublicUrl(filePath);
+
+      const imageUrl = publicUrlData.publicUrl;
+
+      // 4. Insert into prescriptions table
+      const { error: dbError } = await supabase
+        .from("prescriptions")
+        .insert([{ user_id: user.id, image_url: imageUrl, notes }]);
+      
+      if (dbError) throw dbError;
+
+      alert("Resep berhasil diunggah dan sedang diverifikasi Admin!");
+      setFile(null);
       setNotes("");
+      
+      // Reset input file manually
+      document.getElementById('file-upload').value = "";
+      
       fetchPrescriptions();
+      
+    } catch (error) {
+      alert("Gagal mengirim resep: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,16 +106,16 @@ export default function MemberResep() {
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">URL Gambar Resep</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Pilih Foto Resep</label>
               <input 
-                type="url" 
+                id="file-upload"
+                type="file" 
+                accept="image/*"
                 required
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://example.com/resep.jpg"
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-teal-500 transition"
+                onChange={(e) => setFile(e.target.files[0])}
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-teal-500 transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
               />
-              <p className="text-xs text-gray-500 mt-1">*Masukkan link foto resep doktermu.</p>
+              <p className="text-xs text-gray-500 mt-1">*Pilih file foto berformat .jpg, .png, dll dari perangkatmu.</p>
             </div>
             
             <div>
