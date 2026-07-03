@@ -106,12 +106,23 @@ export default function KatalogProduk() {
     setIsCheckoutLoading(true);
     try {
       const orderId = "TRX-" + Math.floor(1000 + Math.random() * 9000);
+      const pointsEarned = Math.floor(finalPrice / 10000);
+
+      const { data: profile } = await supabase.from('profiles').select('loyalty_points').eq('id', user.id).single();
+      const currentPoints = profile?.loyalty_points || 0;
+      const newPoints = currentPoints + pointsEarned;
+      
+      let newLevel = "Silver";
+      if (newPoints >= 1000) newLevel = "Gold";
+      if (newPoints >= 5000) newLevel = "Platinum";
+
       const { error: orderError } = await supabase
         .from("orders")
         .insert([{
           id: orderId,
           user_id: user.id,
           total_amount: finalPrice,
+          points_earned: pointsEarned,
           payment_method: "Transfer Bank",
           status: "completed"
         }]);
@@ -138,6 +149,11 @@ export default function KatalogProduk() {
           .update({ stock: newStock })
           .eq("id", item.id);
       }
+
+      await supabase
+        .from("profiles")
+        .update({ loyalty_points: newPoints, member_level: newLevel })
+        .eq('id', user.id);
 
       setCart([]);
       setIsCartOpen(false);

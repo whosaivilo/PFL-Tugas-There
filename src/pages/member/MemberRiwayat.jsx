@@ -36,8 +36,6 @@ export default function MemberRiwayat() {
         total_amount,
         payment_method,
         status,
-        rating,
-        feedback_text,
         order_items (
           quantity,
           medicines (

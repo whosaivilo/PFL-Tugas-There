@@ -29,8 +29,7 @@ export default function MemberLayout() {
   };
 
   const navItems = [
-    { title: "Beranda Utama",      path: "/",                  icon: <BsHouseDoor />,            end: true },
-    { title: "Dashboard",          path: "/member",            icon: <BsGrid1X2Fill />,          end: true },
+    { title: "Beranda",            path: "/member",            icon: <BsHouseDoor />,            end: true },
     { title: "Katalog Obat",       path: "/member/katalog",    icon: <BsCart3 /> },
     { title: "Riwayat",            path: "/member/riwayat",    icon: <BsClockHistory /> },
     { title: "Loyalty & Reward",   path: "/member/loyalty",    icon: <BsGift /> },
