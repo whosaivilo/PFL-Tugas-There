@@ -1,35 +1,70 @@
-import React from "react";
-import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort, BsStarFill } from "react-icons/bs";
+import React, { useState, useEffect } from "react";
+import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
 import ProgressBar from "../../components/ProgressBar";
 import Table from "../../components/Table";
 import Badge from "../../components/Badge";
+import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function MemberDashboard() {
-  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
+  const { user } = useAuth();
+  const [profile, setProfile] = useState(null);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!currentUser) return null;
+  useEffect(() => {
+    if (!user) return;
+    const fetchData = async () => {
+      // Fetch Profile (Loyalty Points)
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      
+      if (profileData) setProfile(profileData);
+
+      // Fetch Recent Orders
+      const { data: ordersData } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(3);
+      
+      if (ordersData) setRecentOrders(ordersData);
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (!user || loading) {
+    return <div className="p-8 text-center text-gray-500">Memuat dashboard...</div>;
+  }
 
   const getFirstName = (name) => name?.split(" ")[0] || "Member";
 
   // Calculate progress for next level
-  const points = currentUser.loyaltyPoints || 0;
+  const points = profile?.loyalty_points || 0;
   let nextLevel = "Gold";
-  let maxPoints = 3000;
-  if (currentUser.memberLevel === "Gold") {
+  let maxPoints = 1000;
+  if (profile?.member_level === "Gold") {
     nextLevel = "Platinum";
-    maxPoints = 8000;
-  } else if (currentUser.memberLevel === "Platinum") {
+    maxPoints = 5000;
+  } else if (profile?.member_level === "Platinum") {
     nextLevel = "Max Level";
-    maxPoints = points; // Already max
+    maxPoints = points || 1; // Prevent division by zero
   }
   const progressPercent = Math.min((points / maxPoints) * 100, 100);
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader 
-        title={`Halo, ${getFirstName(currentUser.name)}! 👋`} 
+        title={`Halo, ${getFirstName(profile?.full_name)}! 👋`} 
         description="Senang melihatmu kembali. Yuk, jaga kesehatanmu hari ini dan dapatkan lebih banyak poin loyalty."
       />
 
@@ -42,7 +77,7 @@ export default function MemberDashboard() {
               <p className="text-sm text-gray-500">Tingkatkan terus transaksimu!</p>
             </div>
             <div className="text-right">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Level Saat Ini: <span className="text-teal-600 font-bold">{currentUser.memberLevel}</span></p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Level Saat Ini: <span className="text-teal-600 font-bold">{profile?.member_level || "Silver"}</span></p>
               <Badge variant="info">Menuju {nextLevel}</Badge>
             </div>
           </div>
@@ -79,7 +114,7 @@ export default function MemberDashboard() {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h3 className="text-lg font-bold text-gray-800">Transaksi Terakhir</h3>
-            <p className="text-sm text-gray-500">Ringkasan belanja bulan ini</p>
+            <p className="text-sm text-gray-500">Ringkasan belanja terakhirmu</p>
           </div>
           <Link to="/member/riwayat" className="text-sm font-semibold text-teal-600 hover:text-teal-700 hover:underline">
             Lihat Semua
@@ -96,8 +131,8 @@ export default function MemberDashboard() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {currentUser.transactions?.history?.slice(0, 3).map((trx, idx) => (
-              <tr key={idx} className="hover:bg-gray-50/50 transition">
+            {recentOrders.map((trx) => (
+              <tr key={trx.id} className="hover:bg-gray-50/50 transition">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600">
@@ -106,16 +141,18 @@ export default function MemberDashboard() {
                     <span className="text-sm font-semibold text-gray-800">{trx.id}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">{trx.date}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-600">
+                  {new Date(trx.created_at).toLocaleDateString("id-ID")}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-800">
-                  Rp {trx.total?.toLocaleString("id-ID")}
+                  Rp {trx.total_amount?.toLocaleString("id-ID")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <Badge variant="success">{trx.paymentMethod}</Badge>
+                  <Badge variant="success">{trx.payment_method}</Badge>
                 </td>
               </tr>
             ))}
-            {(!currentUser.transactions?.history || currentUser.transactions.history.length === 0) && (
+            {recentOrders.length === 0 && (
               <tr>
                 <td colSpan="4" className="px-6 py-8 text-center text-gray-500 font-medium text-sm">
                   Belum ada riwayat transaksi.
