@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { BsBagCheckFill, BsCart3, BsX, BsTrash, BsPlus, BsDash, BsSearch, BsHeartPulse, BsBandaid, BsCupHot, BsEmojiSmile, BsThermometerHalf, BsShieldCheck } from "react-icons/bs";
 import { supabase } from "../../lib/supabase"; 
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function KatalogProduk() {
   const [products, setProducts] = useState([]);
@@ -22,6 +22,8 @@ export default function KatalogProduk() {
 
   const { user, role } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isMember = location.pathname.includes("/member");
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -106,7 +108,7 @@ export default function KatalogProduk() {
     setIsCheckoutLoading(true);
     try {
       const orderId = "TRX-" + Math.floor(1000 + Math.random() * 9000);
-      const pointsEarned = Math.floor(finalPrice / 100); // 1 point per Rp 100
+      const pointsEarned = Math.floor(finalPrice / 1000) * 10; // 10 point per Rp 1000 belanja
 
       const { data: profile } = await supabase.from('profiles').select('loyalty_points').eq('id', user.id).single();
       const currentPoints = profile?.loyalty_points || 0;
@@ -205,7 +207,7 @@ export default function KatalogProduk() {
   }, [products, searchQuery, activeTopCategory, activeSubCategory]);
 
   return (
-    <div className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-[Poppins,sans-serif]">
+    <div className={`${isMember ? 'pt-0' : 'pt-24 md:pt-32'} pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-[Poppins,sans-serif]`}>
       
       {/* ── 1. HERO BANNER PROMO CAROUSEL ── */}
       <div className="w-full mb-8 overflow-x-auto flex gap-4 snap-x snap-mandatory scrollbar-hide py-2">
@@ -248,6 +250,22 @@ export default function KatalogProduk() {
           <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:flex items-center z-10 opacity-70 group-hover:opacity-100 transition-opacity translate-x-10">
             <div className="w-32 h-32 rounded-full border-4 border-white shadow-2xl overflow-hidden">
                <img src="/img/obat2.jpg" alt="Promo 2" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+
+        {/* Banner 3 */}
+        <div className="min-w-[90%] md:min-w-[60%] lg:min-w-[50%] snap-center rounded-2xl overflow-hidden relative flex items-center shadow-md group py-6 md:py-10 shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 opacity-90 transition-opacity group-hover:opacity-100"></div>
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-20 -translate-x-10"></div>
+          
+          <div className="relative z-10 px-6 md:px-10 text-white w-full">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-3 border border-white/30">
+              PROGRAM LOYALITAS
+            </div>
+            <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">Tukar Poinmu<br/>Jadi Hadiah</h2>
+            <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-blue-900 font-bold text-xs shadow-sm cursor-pointer hover:bg-blue-50">
+              Cek Katalog Hadiah
             </div>
           </div>
         </div>

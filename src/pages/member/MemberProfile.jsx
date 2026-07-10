@@ -24,18 +24,22 @@ export default function MemberProfile() {
         <div className="w-full md:w-1/3 flex flex-col gap-6">
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
             <div className="relative inline-block mb-4">
-              <div className="w-24 h-24 mx-auto border-4 border-teal-50 rounded-full flex items-center justify-center overflow-hidden">
-                <img 
-                  src={currentUser.avatar} 
-                  alt={currentUser.name || "Avatar"} 
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-24 h-24 mx-auto border-4 border-teal-50 rounded-full flex items-center justify-center overflow-hidden bg-teal-100 text-teal-700 text-3xl font-bold">
+                {currentUser.avatar ? (
+                  <img 
+                    src={currentUser.avatar} 
+                    alt={currentUser.name || "Avatar"} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  (currentUser.name || currentUser.full_name || currentUser.username || "US").substring(0, 2).toUpperCase()
+                )}
               </div>
               <div className="absolute bottom-0 right-0 bg-teal-500 text-white p-1.5 rounded-full border-2 border-white">
                 <BsCheckCircleFill className="text-xs" />
               </div>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-1">{currentUser.name}</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-1">{currentUser.name || currentUser.full_name || currentUser.username}</h2>
             <p className="text-sm font-medium text-gray-500 mb-4">@{currentUser.username}</p>
             
             <Badge variant="info">{currentUser.memberLevel} Member</Badge>
