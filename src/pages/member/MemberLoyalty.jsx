@@ -44,6 +44,24 @@ export default function MemberLoyalty() {
     alert(`Referral code ${code} disalin!`);
   };
 
+  const handleRedeem = async (reward) => {
+    if (points >= reward.cost) {
+      if (window.confirm(`Tukarkan ${reward.cost} poin untuk "${reward.name}"?`)) {
+        setLoading(true);
+        const newPoints = points - reward.cost;
+        const { error } = await supabase.from('profiles').update({ loyalty_points: newPoints }).eq('id', user.id);
+        
+        if (!error) {
+          alert(`Berhasil menukarkan reward! Poin Anda tersisa ${newPoints}. Cek email Anda untuk klaim.`);
+          setProfile({ ...profile, loyalty_points: newPoints });
+        } else {
+          alert("Gagal menukarkan poin.");
+        }
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
@@ -125,7 +143,7 @@ export default function MemberLoyalty() {
                   <p className="text-sm font-semibold text-gray-500 mb-4">{reward.cost.toLocaleString("id-ID")} Poin</p>
                   
                   {canRedeem ? (
-                    <Button type="primary" onClick={() => {}}>
+                    <Button type="primary" onClick={() => handleRedeem(reward)}>
                       <span className="w-full text-center">Tukar Poin</span>
                     </Button>
                   ) : (

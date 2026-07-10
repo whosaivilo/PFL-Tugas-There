@@ -106,7 +106,7 @@ export default function KatalogProduk() {
     setIsCheckoutLoading(true);
     try {
       const orderId = "TRX-" + Math.floor(1000 + Math.random() * 9000);
-      const pointsEarned = Math.floor(finalPrice / 10000);
+      const pointsEarned = Math.floor(finalPrice / 100); // 1 point per Rp 100
 
       const { data: profile } = await supabase.from('profiles').select('loyalty_points').eq('id', user.id).single();
       const currentPoints = profile?.loyalty_points || 0;
@@ -157,7 +157,7 @@ export default function KatalogProduk() {
 
       setCart([]);
       setIsCartOpen(false);
-      alert(`Checkout Berhasil!\nID Transaksi: ${orderId}\n\nPoin loyalitasmu otomatis bertambah sesuai dengan jumlah pembelanjaan!`);
+      alert(`Checkout Berhasil!\nID Transaksi: ${orderId}\n\nPoin loyalitasmu otomatis bertambah sesuai dengan jumlah pembelanjaan! (+${pointsEarned} Pts)`);
       fetchProducts();
     } catch (error) {
       console.error("Error Checkout:", error);
@@ -205,35 +205,51 @@ export default function KatalogProduk() {
   }, [products, searchQuery, activeTopCategory, activeSubCategory]);
 
   return (
-    <div className="pt-36 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-[Poppins,sans-serif]">
+    <div className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-[Poppins,sans-serif]">
       
-      {/* ── 1. HERO BANNER PROMO (Mirip GoApotik) ── */}
-      <div className="w-full rounded-2xl overflow-hidden relative flex items-center shadow-md mb-8 group py-6 md:py-10">
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 opacity-90 transition-opacity group-hover:opacity-100"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-20 translate-x-10"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-400/30 rounded-full blur-2xl translate-y-10 -translate-x-10"></div>
-        
-        <div className="relative z-10 px-6 md:px-10 lg:px-12 text-white w-full md:w-3/5">
-          <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-3 border border-white/30">
-            PROMO SPESIAL BULAN INI
+      {/* ── 1. HERO BANNER PROMO CAROUSEL ── */}
+      <div className="w-full mb-8 overflow-x-auto flex gap-4 snap-x snap-mandatory scrollbar-hide py-2">
+        {/* Banner 1 */}
+        <div className="min-w-[90%] md:min-w-[60%] lg:min-w-[50%] snap-center rounded-2xl overflow-hidden relative flex items-center shadow-md group py-6 md:py-10 shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 opacity-90 transition-opacity group-hover:opacity-100"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-20 translate-x-10"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-400/30 rounded-full blur-2xl translate-y-10 -translate-x-10"></div>
+          
+          <div className="relative z-10 px-6 md:px-10 text-white w-full">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-3 border border-white/30">
+              PROMO SPESIAL BULAN INI
+            </div>
+            <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">DISCOUNT 5%<br/>All Products</h2>
+            <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-teal-900 font-bold text-xs shadow-sm">
+              Kode Voucher: <span className="text-orange-500 tracking-wider font-black text-sm">PHARMAJUL26</span>
+            </div>
           </div>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-black mb-2 leading-tight">DISCOUNT 5%<br/>All Products</h2>
-          <p className="text-teal-50 text-xs md:text-sm font-medium max-w-sm hidden md:block leading-relaxed mb-1">
-            Dapatkan potongan harga tanpa batas maksimal belanja pada semua produk Farmasi kami.
-          </p>
-          <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-teal-900 font-bold text-xs md:text-sm shadow-sm">
-            Kode Voucher: <span className="text-orange-500 tracking-wider font-black text-sm md:text-base">PHARMAJUL26</span>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:flex items-center z-10 opacity-70 group-hover:opacity-100 transition-opacity translate-x-10">
+            <div className="w-32 h-32 rounded-full border-4 border-white shadow-2xl overflow-hidden">
+              <img src="/img/obat.jpg" alt="Promo 1" className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
-        
-        {/* Floating Images on the right */}
-        <div className="absolute right-2 md:right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 lg:gap-4 z-10">
-           <div className="relative w-36 h-36 lg:w-52 lg:h-52 rounded-full border-4 border-white/80 shadow-2xl overflow-hidden transform -translate-y-2 rotate-2">
-             <img src="/img/obat.jpg" alt="Medicine" className="w-full h-full object-cover" />
-           </div>
-           <div className="relative w-40 h-40 lg:w-60 lg:h-60 rounded-full border-4 border-white/80 shadow-2xl overflow-hidden transform translate-y-2 -rotate-2 z-20">
-             <img src="/img/obat2.jpg" alt="Vitamins" className="w-full h-full object-cover" />
-           </div>
+
+        {/* Banner 2 */}
+        <div className="min-w-[90%] md:min-w-[60%] lg:min-w-[50%] snap-center rounded-2xl overflow-hidden relative flex items-center shadow-md group py-6 md:py-10 shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-orange-400 to-red-400 opacity-90 transition-opacity group-hover:opacity-100"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-20 translate-x-10"></div>
+          
+          <div className="relative z-10 px-6 md:px-10 text-white w-full">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-3 border border-white/30">
+              GRATIS KONSULTASI
+            </div>
+            <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">Dapatkan<br/>Saran Ahli</h2>
+            <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-orange-900 font-bold text-xs shadow-sm cursor-pointer hover:bg-orange-50">
+              Tanya Apoteker Sekarang
+            </div>
+          </div>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:flex items-center z-10 opacity-70 group-hover:opacity-100 transition-opacity translate-x-10">
+            <div className="w-32 h-32 rounded-full border-4 border-white shadow-2xl overflow-hidden">
+               <img src="/img/obat2.jpg" alt="Promo 2" className="w-full h-full object-cover" />
+            </div>
+          </div>
         </div>
       </div>
 
