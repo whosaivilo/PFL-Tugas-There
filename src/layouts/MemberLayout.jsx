@@ -8,11 +8,12 @@ import {
 import { FaHeartPulse } from "react-icons/fa6";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function MemberLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
+  const { profile } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -87,15 +88,15 @@ export default function MemberLayout() {
                 className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 transition"
               >
                 <img
-                  src={currentUser?.avatar}
-                  alt={currentUser?.name}
-                  onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name || "U")}&background=0d9488&color=fff`; }}
+                  src={profile?.avatar_url}
+                  alt={profile?.full_name}
+                  onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || profile?.username || "U")}&background=0d9488&color=fff`; }}
                   className="w-7 h-7 rounded-lg object-cover"
                 />
                 <div className="hidden sm:block text-left">
-                  <p className="text-[12px] font-bold text-gray-800 leading-none">{currentUser?.name?.split(" ")[0]}</p>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${levelBadge[currentUser?.memberLevel]}`}>
-                    {currentUser?.memberLevel}
+                  <p className="text-[12px] font-bold text-gray-800 leading-none">{(profile?.full_name || profile?.username || "Member").split(" ")[0]}</p>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${levelBadge[profile?.member_level || "Silver"]}`}>
+                    {profile?.member_level || "Silver"}
                   </span>
                 </div>
                 <BsChevronDown className={`text-gray-400 text-xs transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
@@ -106,10 +107,10 @@ export default function MemberLayout() {
                   <div className="fixed inset-0 z-10" onClick={() => setDropdownOpen(false)} />
                   <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-150">
                     <div className="p-3 border-b border-gray-50">
-                      <p className="text-xs font-bold text-gray-800">{currentUser?.name}</p>
-                      <p className="text-[11px] text-gray-400">@{currentUser?.username}</p>
+                      <p className="text-xs font-bold text-gray-800">{profile?.full_name || "Member"}</p>
+                      <p className="text-[11px] text-gray-400">@{profile?.username || "member"}</p>
                       <p className="text-[11px] font-semibold text-teal-600 mt-0.5">
-                        {(currentUser?.loyaltyPoints || 0).toLocaleString("id-ID")} poin
+                        {(profile?.loyalty_points || 0).toLocaleString("id-ID")} poin
                       </p>
                     </div>
                     <div className="p-1.5">

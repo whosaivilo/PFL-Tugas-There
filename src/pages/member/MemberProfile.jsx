@@ -1,15 +1,16 @@
 import React from "react";
-
 import { BsPersonVcard, BsTelephone, BsEnvelope, BsGeoAlt, BsGenderAmbiguous, BsCalendarDate, BsCheckCircleFill, BsToggleOn } from "react-icons/bs";
 import Avatar from "../../components/Avatar";
 import Badge from "../../components/Badge";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
+import { useAuth } from "../../contexts/AuthContext";
+import dayjs from "dayjs";
 
 export default function MemberProfile() {
-  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user")) || {};
+  const { profile } = useAuth();
 
-  if (!currentUser) return null;
+  if (!profile) return null;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -25,24 +26,24 @@ export default function MemberProfile() {
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
             <div className="relative inline-block mb-4">
               <div className="w-24 h-24 mx-auto border-4 border-teal-50 rounded-full flex items-center justify-center overflow-hidden bg-teal-100 text-teal-700 text-3xl font-bold">
-                {currentUser.avatar ? (
+                {profile.avatar_url ? (
                   <img 
-                    src={currentUser.avatar} 
-                    alt={currentUser.name || "Avatar"} 
+                    src={profile.avatar_url} 
+                    alt={profile.full_name || "Avatar"} 
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  (currentUser.name || currentUser.full_name || currentUser.username || "US").substring(0, 2).toUpperCase()
+                  (profile.full_name || profile.username || "US").substring(0, 2).toUpperCase()
                 )}
               </div>
               <div className="absolute bottom-0 right-0 bg-teal-500 text-white p-1.5 rounded-full border-2 border-white">
                 <BsCheckCircleFill className="text-xs" />
               </div>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-1">{currentUser.name || currentUser.full_name || currentUser.username}</h2>
-            <p className="text-sm font-medium text-gray-500 mb-4">@{currentUser.username}</p>
+            <h2 className="text-xl font-bold text-gray-800 mb-1">{profile.full_name || profile.username}</h2>
+            <p className="text-sm font-medium text-gray-500 mb-4">@{profile.username}</p>
             
-            <Badge variant="info">{currentUser.memberLevel} Member</Badge>
+            <Badge variant="info">{profile.member_level || "Silver"} Member</Badge>
             
             <hr className="my-6 border-gray-100" />
             
@@ -53,7 +54,7 @@ export default function MemberProfile() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-semibold">ID Member</p>
-                  <p className="text-sm font-bold text-gray-800">{currentUser.id}</p>
+                  <p className="text-sm font-bold text-gray-800">{profile.id.substring(0,8)}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -62,7 +63,7 @@ export default function MemberProfile() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-semibold">Bergabung Sejak</p>
-                  <p className="text-sm font-bold text-gray-800">{currentUser.account?.joinDate || currentUser.joinDate}</p>
+                  <p className="text-sm font-bold text-gray-800">{dayjs(profile.created_at).format('DD MMM YYYY')}</p>
                 </div>
               </div>
             </div>
@@ -81,14 +82,14 @@ export default function MemberProfile() {
                 <p className="text-xs text-gray-400 font-semibold mb-1 flex items-center gap-1.5">
                   <BsTelephone /> Nomor HP
                 </p>
-                <p className="text-[15px] font-semibold text-gray-800">{currentUser.contact?.phone || currentUser.phone}</p>
+                <p className="text-[15px] font-semibold text-gray-800">{profile.phone || "-"}</p>
               </div>
               
               <div>
                 <p className="text-xs text-gray-400 font-semibold mb-1 flex items-center gap-1.5">
                   <BsEnvelope /> Email
                 </p>
-                <p className="text-[15px] font-semibold text-gray-800">{currentUser.contact?.email || currentUser.email}</p>
+                <p className="text-[15px] font-semibold text-gray-800">{profile.email || "-"}</p>
               </div>
               
               <div>
@@ -96,7 +97,7 @@ export default function MemberProfile() {
                   <BsGenderAmbiguous /> Jenis Kelamin
                 </p>
                 <p className="text-[15px] font-semibold text-gray-800">
-                  {currentUser.gender === "L" ? "Laki-laki" : "Perempuan"}
+                  {profile.gender === "L" ? "Laki-laki" : profile.gender === "P" ? "Perempuan" : "-"}
                 </p>
               </div>
               
@@ -104,7 +105,7 @@ export default function MemberProfile() {
                 <p className="text-xs text-gray-400 font-semibold mb-1 flex items-center gap-1.5">
                   <BsCalendarDate /> Tanggal Lahir
                 </p>
-                <p className="text-[15px] font-semibold text-gray-800">{currentUser.birthDate}</p>
+                <p className="text-[15px] font-semibold text-gray-800">{profile.birth_date ? dayjs(profile.birth_date).format('DD MMM YYYY') : "-"}</p>
               </div>
               
               <div className="md:col-span-2">
@@ -112,7 +113,7 @@ export default function MemberProfile() {
                   <BsGeoAlt /> Alamat
                 </p>
                 <p className="text-[15px] font-semibold text-gray-800">
-                  {currentUser.contact?.address || currentUser.address}, {currentUser.contact?.city || currentUser.city}
+                  {profile.address || "-"}
                 </p>
               </div>
             </div>

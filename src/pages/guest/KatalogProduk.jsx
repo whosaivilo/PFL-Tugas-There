@@ -3,6 +3,7 @@ import { BsBagCheckFill, BsCart3, BsX, BsTrash, BsPlus, BsDash, BsSearch, BsHear
 import { supabase } from "../../lib/supabase"; 
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function KatalogProduk() {
   const [products, setProducts] = useState([]);
@@ -20,7 +21,7 @@ export default function KatalogProduk() {
   const [voucherInput, setVoucherInput] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
 
-  const { user, role } = useAuth();
+  const { user, role, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isMember = location.pathname.includes("/member");
@@ -55,7 +56,7 @@ export default function KatalogProduk() {
       const existing = prev.find(item => item.id === product.id);
       if (existing) {
         if (existing.qty >= product.stock) {
-          alert(`Maaf, stok ${product.name} hanya tersisa ${product.stock}`);
+          toast.error(`Maaf, stok ${product.name} hanya tersisa ${product.stock}`);
           return prev;
         }
         return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item);
@@ -71,7 +72,7 @@ export default function KatalogProduk() {
       if (item.id === id) {
         const newQty = item.qty + delta;
         if (newQty > maxStock) {
-          alert(`Maaf, stok hanya tersisa ${maxStock}`);
+          toast.error(`Maaf, stok hanya tersisa ${maxStock}`);
           return item;
         }
         return newQty > 0 ? { ...item, qty: newQty } : item;
@@ -87,21 +88,21 @@ export default function KatalogProduk() {
   const applyVoucher = () => {
     if (voucherInput.trim().toUpperCase() === "PHARMAJUL26") {
       setDiscountPercent(5);
-      alert("Voucher Berhasil! Anda mendapatkan diskon 5%.");
+      toast.success("Voucher Berhasil! Anda mendapatkan diskon 5%.");
     } else {
       setDiscountPercent(0);
-      alert("Kode voucher tidak valid atau sudah kedaluwarsa.");
+      toast.error("Kode voucher tidak valid atau sudah kedaluwarsa.");
     }
   };
 
   const handleCheckout = async () => {
     if (!user) {
-      alert("Silakan Login terlebih dahulu untuk melakukan Checkout!");
+      toast.error("Silakan Login terlebih dahulu untuk melakukan Checkout!");
       navigate("/login");
       return;
     }
     if (role !== "member") {
-      alert("Hanya akun Member yang dapat melakukan pembelian!");
+      toast.error("Hanya akun Member yang dapat melakukan pembelian!");
       return;
     }
 
@@ -159,11 +160,16 @@ export default function KatalogProduk() {
 
       setCart([]);
       setIsCartOpen(false);
-      alert(`Checkout Berhasil!\nID Transaksi: ${orderId}\n\nPoin loyalitasmu otomatis bertambah sesuai dengan jumlah pembelanjaan! (+${pointsEarned} Pts)`);
+      
+      if (refreshProfile) await refreshProfile();
+      
+      toast.success(`Checkout Berhasil! ID Transaksi: ${orderId}`, {
+        description: `Poin loyalitasmu otomatis bertambah sesuai dengan jumlah pembelanjaan! (+${pointsEarned} Pts)`
+      });
       fetchProducts();
     } catch (error) {
       console.error("Error Checkout:", error);
-      alert("Terjadi kesalahan saat checkout. Silakan periksa koneksi atau hubungi admin.");
+      toast.error("Terjadi kesalahan saat checkout. Silakan periksa koneksi atau hubungi admin.");
     } finally {
       setIsCheckoutLoading(false);
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BsBagCheck, BsChatDots, BsHeadset, BsExclamationTriangle, BsStarFill, BsStar, BsChatLeftText } from "react-icons/bs";
+import { toast } from "sonner";
 import PageHeader from "../../components/PageHeader";
 import Table from "../../components/Table";
 import Badge from "../../components/Badge";
@@ -66,7 +67,7 @@ export default function MemberRiwayat() {
   const submitReview = async () => {
     if (!selectedOrder) return;
     if (!feedback.trim()) {
-      alert("Mohon isi teks ulasan.");
+      toast.error("Mohon isi teks ulasan.");
       return;
     }
 
@@ -83,9 +84,9 @@ export default function MemberRiwayat() {
 
     if (error) {
       console.error(error);
-      alert("Gagal mengirim ulasan.");
+      toast.error("Gagal mengirim ulasan.");
     } else {
-      alert("Terima kasih atas ulasanmu!");
+      toast.success("Terima kasih atas ulasanmu!");
       setReviewModalOpen(false);
       fetchOrders(); // Refresh data
     }
