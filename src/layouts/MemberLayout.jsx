@@ -53,7 +53,7 @@ export default function MemberLayout() {
     { title: "Katalog Obat",       path: "/member/katalog",    icon: <BsCart3 /> },
     { title: "Riwayat",            path: "/member/riwayat",    icon: <BsClockHistory /> },
     { title: "Loyalty & Reward",   path: "/member/loyalty",    icon: <BsGift /> },
-    { title: "Resep & Pengingat",  path: "/member/resep",      icon: <BsFileEarmarkMedical /> },
+    { title: "Resep",              path: "/member/resep",      icon: <BsFileEarmarkMedical /> },
   ];
 
   return (
