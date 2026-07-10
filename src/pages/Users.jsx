@@ -305,6 +305,9 @@ export default function Users() {
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-left">Nama Pengguna</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-left">Username</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Peran (Role)</th>
+              {selectedRole === "Member" && (
+                <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Poin</th>
+              )}
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Status</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Aksi</th>
             </tr>
@@ -312,7 +315,7 @@ export default function Users() {
           <tbody className="divide-y divide-gray-100 text-sm">
             {loading ? (
               <tr>
-                <td colSpan="5" className="px-6 py-10 text-center text-gray-500 font-medium">
+                <td colSpan={selectedRole === "Member" ? "6" : "5"} className="px-6 py-10 text-center text-gray-500 font-medium">
                   Sedang memuat data dari Supabase...
                 </td>
               </tr>
@@ -335,6 +338,11 @@ export default function Users() {
                       {user.role ? user.role.toUpperCase() : "MEMBER"}
                     </span>
                   </td>
+                  {selectedRole === "Member" && (
+                    <td className="px-6 py-4 text-center font-bold text-orange-500">
+                      {user.loyalty_points || 0} Pts
+                    </td>
+                  )}
                   <td className="px-6 py-4 text-center">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                       user.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
