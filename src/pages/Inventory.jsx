@@ -140,7 +140,7 @@ export default function Inventory() {
           group_name: formState.group,
           stock: newStock,
           price: parseInt(formState.price) || oldMed.price,
-          expiry_date: formState.expiryDate || oldMed.expiryDate,
+          expiry_date: formState.expiryDate === "" ? null : formState.expiryDate,
           image_url: formState.imageUrl || oldMed.imageUrl
         })
         .eq('id', formState.id);
@@ -169,7 +169,7 @@ export default function Inventory() {
           group_name: formState.group,
           stock: newStock,
           price: newPrice,
-          expiry_date: formState.expiryDate || null,
+          expiry_date: formState.expiryDate === "" ? null : formState.expiryDate,
           image_url: formState.imageUrl || null
         }]);
 
@@ -251,7 +251,9 @@ export default function Inventory() {
                       
                       <div>
                         {med.name}
-                        <div className="text-xs text-gray-400 font-normal">Exp: {med.expiryDate || "-"}</div>
+                        <div className={`text-xs font-medium mt-0.5 ${!med.expiryDate ? 'text-gray-400' : new Date(med.expiryDate) < new Date() ? 'text-red-500 font-bold' : 'text-orange-500'}`}>
+                          Exp: {med.expiryDate || "Belum diatur"}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -324,9 +326,9 @@ export default function Inventory() {
               onChange={(e) => setFormState({...formState, stock: e.target.value})}
             />
             <InputField 
-              label="Expiry Date" 
+              label="Tanggal Kedaluwarsa (Exp)" 
               type="date" 
-              value={formState.expiryDate}
+              value={formState.expiryDate || ""}
               onChange={(e) => setFormState({...formState, expiryDate: e.target.value})}
             />
           </div>
