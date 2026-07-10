@@ -11,6 +11,7 @@ import {
   BsPhone,
   BsQuestionCircle,
   BsBoxArrowRight,
+  BsPersonBadge,
 } from "react-icons/bs";
 import { FiChevronDown } from "react-icons/fi";
 import { FaCartPlus } from "react-icons/fa";
