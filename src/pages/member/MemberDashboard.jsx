@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort, BsStarFill, BsCart3, BsChatSquareHeart, BsHeartPulse } from "react-icons/bs";
+import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort, BsStarFill, BsCart3, BsChatSquareHeart, BsHeartPulse, BsLightbulbFill, BsShieldCheck } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Badge from "../../components/Badge";
 import { supabase } from "../../lib/supabase";
@@ -9,6 +9,7 @@ export default function MemberDashboard() {
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
+  const [recommended, setRecommended] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +33,14 @@ export default function MemberDashboard() {
         .limit(4);
       
       if (ordersData) setRecentOrders(ordersData);
+
+      // Fetch some products for recommendation
+      const { data: products } = await supabase
+        .from("medicines")
+        .select("*")
+        .limit(3);
+        
+      if (products) setRecommended(products);
 
       setLoading(false);
     };
@@ -77,7 +86,6 @@ export default function MemberDashboard() {
       
       {/* ── HERO BANNER ── */}
       <div className="relative bg-gradient-to-br from-teal-700 via-emerald-600 to-teal-500 rounded-3xl p-8 md:p-10 text-white shadow-xl overflow-hidden flex flex-col md:flex-row gap-8 items-center justify-between">
-        {/* Abstract Background Shapes */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-300/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
         
@@ -99,7 +107,7 @@ export default function MemberDashboard() {
           </div>
         </div>
 
-        {/* Level & Points Progress Widget */}
+        {/* Level & Points Widget */}
         <div className="relative z-10 w-full md:w-[320px] bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-inner">
           <div className="flex justify-between items-center mb-1">
             <p className="text-xs text-teal-100 font-semibold uppercase tracking-wider">Total Poin</p>
@@ -133,7 +141,7 @@ export default function MemberDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* ── LEFT COLUMN: PROMOS & ACTIONS ── */}
+        {/* ── LEFT COLUMN ── */}
         <div className="lg:col-span-2 space-y-6">
           
           {/* Quick Actions Grid */}
@@ -148,21 +156,18 @@ export default function MemberDashboard() {
                 </div>
                 <span className="text-xs font-bold text-gray-700 group-hover:text-teal-700">Katalog Obat</span>
               </Link>
-              
               <Link to="/member/resep" className="group bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-100 transition-all text-center flex flex-col items-center justify-center gap-3">
                 <div className="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
                   <BsChatSquareHeart className="text-xl" />
                 </div>
                 <span className="text-xs font-bold text-gray-700 group-hover:text-blue-700">Tebus Resep</span>
               </Link>
-              
               <Link to="/member/riwayat" className="group bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-100 transition-all text-center flex flex-col items-center justify-center gap-3">
                 <div className="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
                   <BsClockHistory className="text-xl" />
                 </div>
                 <span className="text-xs font-bold text-gray-700 group-hover:text-emerald-700">Riwayat Belanja</span>
               </Link>
-              
               <Link to="/member/loyalty" className="group bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-purple-100 transition-all text-center flex flex-col items-center justify-center gap-3">
                 <div className="w-12 h-12 bg-purple-50 text-purple-500 rounded-full flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
                   <BsGift className="text-xl" />
@@ -172,27 +177,73 @@ export default function MemberDashboard() {
             </div>
           </div>
 
-          {/* Promo Section */}
-          <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-100 relative overflow-hidden">
-            <div className="absolute right-0 top-0 w-32 h-32 bg-orange-200/50 rounded-full blur-2xl translate-x-1/2 -translate-y-1/4"></div>
-            <div className="relative z-10 flex flex-col md:flex-row gap-6 items-center justify-between">
-              <div>
-                <Badge className="bg-orange-100 text-orange-700 border-none mb-2">Promo Spesial</Badge>
-                <h3 className="text-xl font-bold text-gray-800 mb-1">Diskon 5% untuk Semua Produk!</h3>
-                <p className="text-sm text-gray-600 mb-4">Gunakan kode voucher di halaman keranjang belanja sebelum kehabisan.</p>
-                <div className="inline-block bg-white border border-dashed border-orange-300 text-orange-600 font-mono font-bold text-lg px-4 py-2 rounded-lg shadow-sm">
-                  PHARMAJUL26
-                </div>
+          {/* New Feature: Health Tip & Promo Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Promo Banner */}
+            <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-100 relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute right-0 top-0 w-24 h-24 bg-orange-200/50 rounded-full blur-xl translate-x-1/2 -translate-y-1/4"></div>
+              <div className="relative z-10">
+                <Badge className="bg-orange-100 text-orange-700 border-none mb-3">Promo Spesial</Badge>
+                <h3 className="text-lg font-bold text-gray-800 mb-1">Diskon 5% Belanja!</h3>
+                <p className="text-xs text-gray-600 mb-4">Gunakan kode voucher di keranjang.</p>
               </div>
-              <img src="https://illustrations.popsy.co/amber/success.svg" alt="Promo" className="w-32 h-32 hidden md:block" />
+              <div className="relative z-10 inline-block bg-white border border-dashed border-orange-300 text-orange-600 font-mono font-bold text-center px-4 py-2 rounded-lg shadow-sm">
+                PHARMAJUL26
+              </div>
+            </div>
+
+            {/* Health Tip */}
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border border-blue-100 relative overflow-hidden flex flex-col justify-between">
+              <div className="absolute right-0 bottom-0 text-6xl text-blue-100/50 -mr-2 -mb-2">
+                <BsLightbulbFill />
+              </div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3 text-blue-600">
+                  <BsLightbulbFill className="text-xl" />
+                  <span className="font-bold text-sm tracking-wide uppercase">Tips Sehat Hari Ini</span>
+                </div>
+                <p className="text-sm font-medium text-gray-700 leading-relaxed mb-4">
+                  Minum air putih setidaknya 8 gelas sehari dapat membantu menjaga kelembapan kulit dan mendukung sistem imun tubuhmu.
+                </p>
+              </div>
+              <Link to="/member/katalog" className="relative z-10 text-xs font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 transition-colors">
+                Cari Suplemen Tubuh <BsArrowRightShort className="text-lg" />
+              </Link>
             </div>
           </div>
 
+          {/* New Feature: Recommended Products */}
+          {recommended.length > 0 && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <BsShieldCheck className="text-teal-500" /> Rekomendasi Untukmu
+                </h3>
+                <Link to="/member/katalog" className="text-xs font-bold text-teal-600 hover:text-teal-700">Lihat Katalog</Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {recommended.map((item) => (
+                  <Link key={item.id} to="/member/katalog" className="group bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-teal-200 transition-all flex flex-col justify-between">
+                    <div>
+                      <div className="w-full h-24 bg-gray-50 rounded-xl mb-3 overflow-hidden flex items-center justify-center">
+                        <img src={item.image_url} alt={item.name} className="h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => e.target.src='https://images.unsplash.com/photo-1584308666744-24d5e4a83852?w=300&q=80'} />
+                      </div>
+                      <h4 className="font-bold text-gray-800 text-sm mb-1 group-hover:text-teal-600 transition-colors line-clamp-2">{item.name}</h4>
+                      <p className="text-[10px] text-gray-400 font-semibold mb-2">{item.group_name}</p>
+                    </div>
+                    <div className="font-black text-teal-700 text-sm">
+                      Rp {item.price.toLocaleString("id-ID")}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── RIGHT COLUMN: RECENT TRANSACTIONS ── */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden h-full flex flex-col">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden h-full flex flex-col min-h-[400px]">
             <div className="p-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
               <h3 className="font-bold text-gray-800 flex items-center gap-2">
                 <BsBagCheck className="text-teal-500" /> Transaksi Terakhir
