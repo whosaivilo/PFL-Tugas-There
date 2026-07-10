@@ -29,25 +29,27 @@ export default function MemberLoyalty() {
   if (loading || !profile) return <div className="p-8 text-center text-gray-500">Memuat data loyalitas...</div>;
 
   const points = profile.loyalty_points || 0;
-  const memberLevel = profile.member_level || "Silver";
   
-  // Tier Progression Logic
+  // Tier Progression Logic computed directly from points
+  let currentLevel = "Silver";
   let nextTierLabel = "Gold";
   let nextTierPoints = 1000;
   let currentTierBase = 0;
   
-  if (points >= 5000 || memberLevel === "Platinum") {
+  if (points >= 5000) {
+    currentLevel = "Platinum";
     nextTierLabel = "Platinum";
     nextTierPoints = 5000;
     currentTierBase = 5000;
-  } else if (points >= 1000 || memberLevel === "Gold") {
+  } else if (points >= 1000) {
+    currentLevel = "Gold";
     nextTierLabel = "Platinum";
     nextTierPoints = 5000;
     currentTierBase = 1000;
   }
 
   let progressPercentage = 100;
-  if (memberLevel !== "Platinum") {
+  if (currentLevel !== "Platinum") {
     const pointsNeeded = nextTierPoints - currentTierBase;
     const pointsEarnedInTier = points - currentTierBase;
     progressPercentage = Math.min(100, Math.max(0, (pointsEarnedInTier / pointsNeeded) * 100));
@@ -103,7 +105,7 @@ export default function MemberLoyalty() {
           {/* Progress Bar Area */}
           <div className="w-full max-w-md mx-auto md:mx-0 mt-4">
             <div className="flex justify-between text-xs font-bold text-gray-300 mb-2">
-              <span>{memberLevel}</span>
+              <span>{currentLevel}</span>
               <span>{nextTierLabel}</span>
             </div>
             <div className="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
@@ -113,7 +115,7 @@ export default function MemberLoyalty() {
               ></div>
             </div>
             <p className="text-xs text-gray-400 mt-2 text-right">
-              {memberLevel !== "Platinum" 
+              {currentLevel !== "Platinum" 
                 ? `Butuh ${(nextTierPoints - points).toLocaleString("id-ID")} poin lagi ke ${nextTierLabel}` 
                 : "Anda berada di level tertinggi!"}
             </p>
@@ -122,11 +124,11 @@ export default function MemberLoyalty() {
 
         <div className="relative z-10 w-full md:w-auto bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col items-center justify-center min-w-[200px]">
           <BsAwardFill className={`text-5xl mb-3 ${
-            memberLevel === 'Platinum' ? 'text-violet-400' :
-            memberLevel === 'Gold' ? 'text-yellow-400' : 'text-gray-300'
+            currentLevel === 'Platinum' ? 'text-violet-400' :
+            currentLevel === 'Gold' ? 'text-yellow-400' : 'text-gray-300'
           }`} />
           <p className="text-xs text-gray-300 uppercase tracking-widest font-bold mb-1">Level Anda</p>
-          <h3 className="text-2xl font-bold text-white">{memberLevel}</h3>
+          <h3 className="text-2xl font-bold text-white">{currentLevel}</h3>
         </div>
       </div>
 
