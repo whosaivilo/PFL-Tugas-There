@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import {
   BsGrid1X2,
   BsBoxSeam,
@@ -20,7 +21,7 @@ import { supabase } from "../lib/supabase";
 
 export default function Sidebar({ onClose }) {
   const navigate = useNavigate();
-  const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
+  const { user, profile, role } = useAuth();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -69,7 +70,7 @@ export default function Sidebar({ onClose }) {
   ];
   
   // Ambil nama dari user yang sedang login, atau fallback ke "Admin"
-  const adminName = currentUser?.name || currentUser?.username || "Admin";
+  const adminName = profile?.username || profile?.full_name || user?.email?.split('@')[0] || "Admin";
   const adminInitials = adminName.substring(0, 2).toUpperCase();
 
   return (
@@ -81,7 +82,7 @@ export default function Sidebar({ onClose }) {
             <FaCartPlus className="text-blue-900 text-lg" />
           </div>
           <h1 className="text-[20px] font-bold tracking-wide text-white">
-            MedConnect
+            PharmaCare
           </h1>
         </div>
       </div>
@@ -109,7 +110,7 @@ export default function Sidebar({ onClose }) {
               {adminName}
             </h3>
             <p className="text-[11px] font-medium text-[#ffcc00] capitalize">
-              {currentUser?.role || "Admin"}
+              {role || "Admin"}
             </p>
           </div>
         </div>

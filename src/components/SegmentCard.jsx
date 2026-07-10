@@ -1,8 +1,13 @@
 import React from 'react';
 
-export default function SegmentCard({ title, count, icon, color, bg, desc }) {
+export default function SegmentCard({ title, count, icon, color, bg, desc, onClick, isActive }) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition">
+    <div 
+      onClick={onClick}
+      className={`p-6 rounded-xl shadow-sm border transition cursor-pointer ${
+        isActive ? 'border-teal-500 ring-2 ring-teal-100 bg-teal-50/10' : 'border-gray-200 bg-white hover:shadow-md hover:border-teal-300'
+      }`}
+    >
       <div className={`w-12 h-12 ${bg} ${color} rounded-lg flex items-center justify-center text-2xl mb-4`}>
         {icon}
       </div>
