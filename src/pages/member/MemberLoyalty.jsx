@@ -3,6 +3,7 @@ import { BsGiftFill, BsAwardFill, BsShareFill, BsCopy, BsUnlockFill } from "reac
 import Button from "../../components/Button";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import TierBenefits from "../../components/TierBenefits";
 
 export default function MemberLoyalty() {
   const { user } = useAuth();
@@ -55,13 +56,22 @@ export default function MemberLoyalty() {
     progressPercentage = Math.min(100, Math.max(0, (pointsEarnedInTier / pointsNeeded) * 100));
   }
   
-  // Fake reward catalog based on points
+  // Fake reward catalog based on points and tiers
   const rewards = [
-    { name: "Voucher Diskon Rp 20.000", cost: 1000, color: "bg-orange-50 text-orange-600" },
-    { name: "Gratis Ongkir s/d Rp 15.000", cost: 1500, color: "bg-blue-50 text-blue-600" },
-    { name: "Voucher Diskon Rp 50.000", cost: 2500, color: "bg-teal-50 text-teal-600" },
-    { name: "Gratis Cek Gula Darah", cost: 3000, color: "bg-purple-50 text-purple-600" },
+    // Silver Rewards
+    { name: "Diskon Belanja Rp 10.000", cost: 200, tier: "Silver", color: "bg-gray-100 text-gray-600" },
+    { name: "Gratis Ongkir s/d Rp 15.000", cost: 500, tier: "Silver", color: "bg-gray-100 text-gray-600" },
+    
+    // Gold Rewards
+    { name: "Voucher Diskon Rp 50.000", cost: 1500, tier: "Gold", color: "bg-yellow-50 text-yellow-600" },
+    { name: "Cek Gula Darah & Kolesterol", cost: 3000, tier: "Gold", color: "bg-yellow-50 text-yellow-600" },
+    
+    // Platinum Rewards
+    { name: "Voucher Spesial Rp 150.000", cost: 6000, tier: "Platinum", color: "bg-violet-50 text-violet-600" },
+    { name: "Parsel Kesehatan Eksklusif", cost: 10000, tier: "Platinum", color: "bg-violet-50 text-violet-600" },
   ];
+
+  const tierRank = { Silver: 1, Gold: 2, Platinum: 3 };
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
@@ -133,39 +143,7 @@ export default function MemberLoyalty() {
       </div>
 
       {/* ── TIER BENEFITS INFO ── */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-6 py-5 border-b border-gray-50 flex items-center gap-3">
-          <BsAwardFill className="text-teal-500 text-xl" />
-          <h3 className="font-bold text-gray-800">Tingkatan Member (Tier)</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-          <div className="p-6 text-center">
-            <div className="w-12 h-12 mx-auto bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mb-3">
-              <BsAwardFill className="text-2xl" />
-            </div>
-            <h4 className="font-bold text-gray-800 text-lg">Silver</h4>
-            <p className="text-xs font-semibold text-gray-400 mb-3">0 - 999 Poin</p>
-            <p className="text-sm text-gray-500">Mendapatkan poin dari setiap pembelanjaan untuk ditukar dengan diskon.</p>
-          </div>
-          <div className="p-6 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-yellow-100 text-yellow-700 text-[9px] font-black uppercase px-2 py-1 rounded-bl-lg">Paling Populer</div>
-            <div className="w-12 h-12 mx-auto bg-yellow-50 text-yellow-400 rounded-full flex items-center justify-center mb-3">
-              <BsAwardFill className="text-2xl" />
-            </div>
-            <h4 className="font-bold text-gray-800 text-lg">Gold</h4>
-            <p className="text-xs font-semibold text-yellow-500 mb-3">1.000 - 4.999 Poin</p>
-            <p className="text-sm text-gray-500">Semua keuntungan Silver + Gratis Ongkir bulanan & Diskon Spesial.</p>
-          </div>
-          <div className="p-6 text-center">
-            <div className="w-12 h-12 mx-auto bg-violet-50 text-violet-400 rounded-full flex items-center justify-center mb-3">
-              <BsAwardFill className="text-2xl" />
-            </div>
-            <h4 className="font-bold text-gray-800 text-lg">Platinum</h4>
-            <p className="text-xs font-semibold text-violet-500 mb-3">5.000+ Poin</p>
-            <p className="text-sm text-gray-500">Akses prioritas, Layanan Konsultasi Gratis, dan Reward Eksklusif.</p>
-          </div>
-        </div>
-      </div>
+      <TierBenefits />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
@@ -208,22 +186,35 @@ export default function MemberLoyalty() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {rewards.map((reward, idx) => {
-              const canRedeem = points >= reward.cost;
+              const meetsTier = tierRank[currentLevel] >= tierRank[reward.tier];
+              const meetsPoints = points >= reward.cost;
+              const canRedeem = meetsTier && meetsPoints;
+              
               return (
-                <div key={idx} className={`p-4 rounded-2xl border transition ${canRedeem ? "border-gray-100 hover:border-teal-300 hover:shadow-md bg-white" : "border-gray-100 bg-gray-50 opacity-60"}`}>
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${reward.color}`}>
-                    {canRedeem ? <BsGiftFill /> : <BsUnlockFill />}
+                <div key={idx} className={`p-5 rounded-2xl border transition relative overflow-hidden ${meetsTier ? "border-gray-100 bg-white hover:border-teal-300 hover:shadow-md" : "border-gray-100 bg-gray-50 opacity-70"}`}>
+                  
+                  {/* Tier Badge */}
+                  <div className={`absolute top-0 right-0 text-[9px] font-black uppercase px-3 py-1 rounded-bl-xl shadow-sm ${
+                    reward.tier === 'Platinum' ? 'bg-violet-100 text-violet-700' :
+                    reward.tier === 'Gold' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-gray-200 text-gray-700'
+                  }`}>
+                    {reward.tier}
                   </div>
-                  <h4 className="font-bold text-gray-800 mb-1">{reward.name}</h4>
-                  <p className="text-sm font-semibold text-gray-500 mb-4">{reward.cost.toLocaleString("id-ID")} Poin</p>
+
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${reward.color}`}>
+                    {canRedeem ? <BsGiftFill className="text-xl" /> : <BsUnlockFill className="text-xl" />}
+                  </div>
+                  <h4 className="font-bold text-gray-800 mb-1 leading-tight pr-10">{reward.name}</h4>
+                  <p className="text-sm font-semibold text-gray-500 mb-5">{reward.cost.toLocaleString("id-ID")} Poin</p>
                   
                   {canRedeem ? (
                     <Button type="primary" onClick={() => handleRedeem(reward)}>
                       <span className="w-full text-center">Tukar Poin</span>
                     </Button>
                   ) : (
-                    <button disabled className="w-full px-4 py-2 bg-gray-200 text-gray-400 rounded text-[14px] font-medium transition-all shadow-sm flex items-center justify-center gap-2 cursor-not-allowed">
-                      Poin Kurang
+                    <button disabled className="w-full px-4 py-2.5 bg-gray-200 text-gray-500 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-not-allowed">
+                      {!meetsTier ? `Khusus Member ${reward.tier}` : "Poin Kurang"}
                     </button>
                   )}
                 </div>

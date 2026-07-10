@@ -260,9 +260,9 @@ export default function KatalogProduk() {
               PROGRAM LOYALITAS
             </div>
             <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">Tukar Poinmu<br/>Jadi Hadiah</h2>
-            <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-blue-900 font-bold text-xs shadow-sm cursor-pointer hover:bg-blue-50">
+            <button onClick={() => navigate("/member/loyalty")} className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-blue-900 font-bold text-xs shadow-sm cursor-pointer hover:bg-blue-50 transition-colors">
               Cek Katalog Hadiah
-            </div>
+            </button>
           </div>
         </div>
       </div>

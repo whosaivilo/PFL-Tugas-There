@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BsGift, BsBagCheck, BsClockHistory, BsArrowRightShort, BsStarFill, BsCart3, BsChatSquareHeart, BsHeartPulse, BsLightbulbFill, BsShieldCheck } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Badge from "../../components/Badge";
+import TierBenefits from "../../components/TierBenefits";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -141,6 +142,8 @@ export default function MemberDashboard() {
           </div>
         </div>
       </div>
+
+      <TierBenefits />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
