@@ -58,24 +58,27 @@ export default function MemberDashboard() {
 
   const getFirstName = (name) => name?.split(" ")[0] || "Member";
 
-  // Calculate progress for next level
+  // Calculate progress for next level robustly based on points to prevent mismatch
   const points = profile?.loyalty_points || 0;
+  let currentLevel = "Silver";
   let nextLevel = "Gold";
   let maxPoints = 1000;
   let basePoints = 0;
   
-  if (profile?.member_level === "Gold") {
-    nextLevel = "Platinum";
-    maxPoints = 5000;
-    basePoints = 1000;
-  } else if (profile?.member_level === "Platinum") {
+  if (points >= 5000) {
+    currentLevel = "Platinum";
     nextLevel = "Max Level";
     maxPoints = 5000;
     basePoints = 5000;
+  } else if (points >= 1000) {
+    currentLevel = "Gold";
+    nextLevel = "Platinum";
+    maxPoints = 5000;
+    basePoints = 1000;
   }
   
   let progressPercent = 100;
-  if (profile?.member_level !== "Platinum") {
+  if (currentLevel !== "Platinum") {
     const pointsNeeded = maxPoints - basePoints;
     const pointsEarnedInTier = points - basePoints;
     progressPercent = Math.min(100, Math.max(0, (pointsEarnedInTier / pointsNeeded) * 100));
@@ -91,7 +94,7 @@ export default function MemberDashboard() {
         
         <div className="relative z-10 space-y-3 text-center md:text-left flex-1 w-full">
           <Badge className="bg-white/20 text-white border-none backdrop-blur-md mb-2">
-            <BsStarFill className="inline-block mr-1.5 text-yellow-300" /> {profile?.member_level || "Silver"} Member
+            <BsStarFill className="inline-block mr-1.5 text-yellow-300" /> {currentLevel} Member
           </Badge>
           <h1 className="text-3xl md:text-4xl font-black tracking-tight">
             Halo, {getFirstName(profile?.full_name)}! 👋
@@ -119,7 +122,7 @@ export default function MemberDashboard() {
           
           <div className="space-y-2">
             <div className="flex justify-between text-[11px] font-bold text-white/80">
-              <span>{profile?.member_level || "Silver"}</span>
+              <span>{currentLevel}</span>
               <span>{nextLevel}</span>
             </div>
             <div className="h-2 w-full bg-black/20 rounded-full overflow-hidden border border-white/10">
@@ -131,7 +134,7 @@ export default function MemberDashboard() {
               </div>
             </div>
             <p className="text-[10px] text-teal-100 text-right mt-1 font-medium">
-              {profile?.member_level !== "Platinum" 
+              {currentLevel !== "Platinum" 
                 ? `Butuh ${(maxPoints - points).toLocaleString("id-ID")} poin lagi` 
                 : "Level Maksimal!"}
             </p>

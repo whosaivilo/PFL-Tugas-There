@@ -131,7 +131,7 @@ export default function KatalogProduk() {
     setIsCheckoutLoading(true);
     try {
       const orderId = "TRX-" + Math.floor(1000 + Math.random() * 9000);
-      const calculatedPoints = Math.floor(finalPrice / 1000) * 10; // Frontend fallback calculation
+      const calculatedPoints = Math.floor(finalPrice / 10000) * 10; // 10 Poin per Rp 10.000
 
       const { data: orderData, error: orderError } = await supabase
         .from("orders")
