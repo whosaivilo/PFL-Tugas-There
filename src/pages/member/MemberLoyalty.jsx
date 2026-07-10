@@ -31,6 +31,28 @@ export default function MemberLoyalty() {
   const points = profile.loyalty_points || 0;
   const memberLevel = profile.member_level || "Silver";
   
+  // Tier Progression Logic
+  let nextTierLabel = "Gold";
+  let nextTierPoints = 1000;
+  let currentTierBase = 0;
+  
+  if (points >= 5000 || memberLevel === "Platinum") {
+    nextTierLabel = "Platinum";
+    nextTierPoints = 5000;
+    currentTierBase = 5000;
+  } else if (points >= 1000 || memberLevel === "Gold") {
+    nextTierLabel = "Platinum";
+    nextTierPoints = 5000;
+    currentTierBase = 1000;
+  }
+
+  let progressPercentage = 100;
+  if (memberLevel !== "Platinum") {
+    const pointsNeeded = nextTierPoints - currentTierBase;
+    const pointsEarnedInTier = points - currentTierBase;
+    progressPercentage = Math.min(100, Math.max(0, (pointsEarnedInTier / pointsNeeded) * 100));
+  }
+  
   // Fake reward catalog based on points
   const rewards = [
     { name: "Voucher Diskon Rp 20.000", cost: 1000, color: "bg-orange-50 text-orange-600" },
@@ -72,14 +94,30 @@ export default function MemberLoyalty() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
-        <div className="relative z-10 space-y-4 text-center md:text-left flex-1">
+        <div className="relative z-10 space-y-4 text-center md:text-left flex-1 w-full">
           <p className="text-gray-400 font-semibold uppercase tracking-widest text-sm mb-2">PharmaCare Loyalty</p>
           <h2 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-emerald-300">
             {points.toLocaleString("id-ID")} <span className="text-2xl md:text-3xl font-bold text-white">PTS</span>
           </h2>
-          <p className="text-gray-300 font-medium max-w-md">
-            Poin kamu bisa ditukarkan dengan berbagai voucher diskon, layanan gratis, atau exclusive merchandise.
-          </p>
+          
+          {/* Progress Bar Area */}
+          <div className="w-full max-w-md mx-auto md:mx-0 mt-4">
+            <div className="flex justify-between text-xs font-bold text-gray-300 mb-2">
+              <span>{memberLevel}</span>
+              <span>{nextTierLabel}</span>
+            </div>
+            <div className="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full transition-all duration-1000" 
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+            <p className="text-xs text-gray-400 mt-2 text-right">
+              {memberLevel !== "Platinum" 
+                ? `Butuh ${(nextTierPoints - points).toLocaleString("id-ID")} poin lagi ke ${nextTierLabel}` 
+                : "Anda berada di level tertinggi!"}
+            </p>
+          </div>
         </div>
 
         <div className="relative z-10 w-full md:w-auto bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col items-center justify-center min-w-[200px]">
@@ -89,6 +127,41 @@ export default function MemberLoyalty() {
           }`} />
           <p className="text-xs text-gray-300 uppercase tracking-widest font-bold mb-1">Level Anda</p>
           <h3 className="text-2xl font-bold text-white">{memberLevel}</h3>
+        </div>
+      </div>
+
+      {/* ── TIER BENEFITS INFO ── */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="px-6 py-5 border-b border-gray-50 flex items-center gap-3">
+          <BsAwardFill className="text-teal-500 text-xl" />
+          <h3 className="font-bold text-gray-800">Tingkatan Member (Tier)</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+          <div className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mb-3">
+              <BsAwardFill className="text-2xl" />
+            </div>
+            <h4 className="font-bold text-gray-800 text-lg">Silver</h4>
+            <p className="text-xs font-semibold text-gray-400 mb-3">0 - 999 Poin</p>
+            <p className="text-sm text-gray-500">Mendapatkan poin dari setiap pembelanjaan untuk ditukar dengan diskon.</p>
+          </div>
+          <div className="p-6 text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-yellow-100 text-yellow-700 text-[9px] font-black uppercase px-2 py-1 rounded-bl-lg">Paling Populer</div>
+            <div className="w-12 h-12 mx-auto bg-yellow-50 text-yellow-400 rounded-full flex items-center justify-center mb-3">
+              <BsAwardFill className="text-2xl" />
+            </div>
+            <h4 className="font-bold text-gray-800 text-lg">Gold</h4>
+            <p className="text-xs font-semibold text-yellow-500 mb-3">1.000 - 4.999 Poin</p>
+            <p className="text-sm text-gray-500">Semua keuntungan Silver + Gratis Ongkir bulanan & Diskon Spesial.</p>
+          </div>
+          <div className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-violet-50 text-violet-400 rounded-full flex items-center justify-center mb-3">
+              <BsAwardFill className="text-2xl" />
+            </div>
+            <h4 className="font-bold text-gray-800 text-lg">Platinum</h4>
+            <p className="text-xs font-semibold text-violet-500 mb-3">5.000+ Poin</p>
+            <p className="text-sm text-gray-500">Akses prioritas, Layanan Konsultasi Gratis, dan Reward Eksklusif.</p>
+          </div>
         </div>
       </div>
 
