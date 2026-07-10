@@ -248,9 +248,7 @@ export default function Inventory() {
                 <tr key={med.id} className="hover:bg-gray-50 transition-colors">
                   <td className="py-4 px-6 font-bold text-gray-800">
                     <div className="flex items-center gap-3">
-                      {med.imageUrl && (
-                        <img src={med.imageUrl} alt={med.name} className="w-10 h-10 rounded-md object-cover border border-gray-200" />
-                      )}
+                      
                       <div>
                         {med.name}
                         <div className="text-xs text-gray-400 font-normal">Exp: {med.expiryDate || "-"}</div>

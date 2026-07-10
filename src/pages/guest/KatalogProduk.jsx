@@ -250,27 +250,6 @@ export default function KatalogProduk() {
           </div>
         </div>
 
-        {/* Banner 2 */}
-        <div className="min-w-[90%] md:min-w-[60%] lg:min-w-[50%] snap-center rounded-2xl overflow-hidden relative flex items-center shadow-md group py-6 md:py-10 shrink-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-orange-400 to-red-400 opacity-90 transition-opacity group-hover:opacity-100"></div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-20 translate-x-10"></div>
-          
-          <div className="relative z-10 px-6 md:px-10 text-white w-full">
-            <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-wider mb-3 border border-white/30">
-              GRATIS KONSULTASI
-            </div>
-            <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">Dapatkan<br/>Saran Ahli</h2>
-            <div className="mt-3 inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl text-orange-900 font-bold text-xs shadow-sm cursor-pointer hover:bg-orange-50">
-              Tanya Apoteker Sekarang
-            </div>
-          </div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:flex items-center z-10 opacity-70 group-hover:opacity-100 transition-opacity translate-x-10">
-            <div className="w-32 h-32 rounded-full border-4 border-white shadow-2xl overflow-hidden">
-               <img src="/img/obat2.jpg" alt="Promo 2" className="w-full h-full object-cover" />
-            </div>
-          </div>
-        </div>
-
         {/* Banner 3 */}
         <div className="min-w-[90%] md:min-w-[60%] lg:min-w-[50%] snap-center rounded-2xl overflow-hidden relative flex items-center shadow-md group py-6 md:py-10 shrink-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 opacity-90 transition-opacity group-hover:opacity-100"></div>
