@@ -344,9 +344,9 @@ export default function KatalogProduk() {
                   </div>
                   <div className="h-40 md:h-44 overflow-hidden bg-white relative flex items-center justify-center p-4 border-b border-gray-50">
                     <img 
-                      src={prod.image_url || "https://images.unsplash.com/photo-1584308666744-24d5e4a83852?w=300&q=80"} 
+                      src={(!prod.image_url || prod.image_url.includes("unsplash")) ? "/img/obat.jpg" : prod.image_url} 
                       alt={prod.name} 
-                      className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${!prod.image_url ? 'opacity-40 grayscale' : ''}`} 
+                      className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${(!prod.image_url || prod.image_url.includes("unsplash")) ? 'opacity-40 grayscale' : ''}`} 
                     />
                   </div>
                   <div className="p-4 flex flex-col flex-1">
@@ -407,9 +407,9 @@ export default function KatalogProduk() {
                 cart.map(item => (
                   <div key={item.id} className="flex gap-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm">
                     <img 
-                      src={item.image_url || "https://images.unsplash.com/photo-1584308666744-24d5e4a83852?w=300&q=80"} 
+                      src={(!item.image_url || item.image_url.includes("unsplash")) ? "/img/obat.jpg" : item.image_url} 
                       alt={item.name} 
-                      className={`w-16 h-16 rounded-lg object-cover bg-gray-100 ${!item.image_url ? 'opacity-40 grayscale' : ''}`} 
+                      className={`w-16 h-16 rounded-lg object-cover bg-gray-100 ${(!item.image_url || item.image_url.includes("unsplash")) ? 'opacity-40 grayscale' : ''}`} 
                     />
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-800 text-sm mb-1">{item.name}</h4>
