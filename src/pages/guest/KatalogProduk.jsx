@@ -109,28 +109,24 @@ export default function KatalogProduk() {
     setIsCheckoutLoading(true);
     try {
       const orderId = "TRX-" + Math.floor(1000 + Math.random() * 9000);
-      const pointsEarned = Math.floor(finalPrice / 1000) * 10; // 10 point per Rp 1000 belanja
+      const calculatedPoints = Math.floor(finalPrice / 1000) * 10; // Frontend fallback calculation
 
-      const { data: profile } = await supabase.from('profiles').select('loyalty_points').eq('id', user.id).single();
-      const currentPoints = profile?.loyalty_points || 0;
-      const newPoints = currentPoints + pointsEarned;
-      
-      let newLevel = "Silver";
-      if (newPoints >= 1000) newLevel = "Gold";
-      if (newPoints >= 5000) newLevel = "Platinum";
-
-      const { error: orderError } = await supabase
+      const { data: orderData, error: orderError } = await supabase
         .from("orders")
         .insert([{
           id: orderId,
           user_id: user.id,
           total_amount: finalPrice,
-          points_earned: pointsEarned,
+          points_earned: calculatedPoints,
           payment_method: "Transfer Bank",
           status: "completed"
-        }]);
+        }])
+        .select()
+        .single();
 
       if (orderError) throw orderError;
+      
+      const actualPointsEarned = orderData?.points_earned || calculatedPoints;
 
       const itemsToInsert = cart.map(item => ({
         order_id: orderId,
@@ -153,18 +149,13 @@ export default function KatalogProduk() {
           .eq("id", item.id);
       }
 
-      await supabase
-        .from("profiles")
-        .update({ loyalty_points: newPoints, member_level: newLevel })
-        .eq('id', user.id);
-
       setCart([]);
       setIsCartOpen(false);
       
       if (refreshProfile) await refreshProfile();
       
       toast.success(`Checkout Berhasil! ID Transaksi: ${orderId}`, {
-        description: `Poin loyalitasmu otomatis bertambah sesuai dengan jumlah pembelanjaan! (+${pointsEarned} Pts)`
+        description: `Poin loyalitasmu bertambah! (+${actualPointsEarned} Pts)`
       });
       fetchProducts();
     } catch (error) {
