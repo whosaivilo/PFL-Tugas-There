@@ -23,11 +23,11 @@ export default function Users() {
   const [errorMsg, setErrorMsg] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   
-  const [selectedRole, setSelectedRole] = useState(() => {
-    if (location.pathname.includes("members")) return "Member";
-    if (location.pathname.includes("admins")) return "Admin";
-    return "- Semua Peran -";
-  });
+  const [selectedStatus, setSelectedStatus] = useState("- Semua Status -");
+  
+  const currentRole = location.pathname.includes("members") ? "Member" 
+                    : location.pathname.includes("admins") ? "Admin" 
+                    : "Semua";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -51,11 +51,7 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    if (location.pathname.includes("members")) setSelectedRole("Member");
-    else if (location.pathname.includes("admins")) setSelectedRole("Admin");
-    else setSelectedRole("- Semua Peran -");
-  }, [location.pathname]);
+  // No need for useEffect to sync role, since currentRole is derived directly from path
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -123,25 +119,28 @@ export default function Users() {
     setIsSubmitting(false);
   };
 
-  // Filter data berdasarkan search dan role
+  // Filter data berdasarkan search, currentRole, dan selectedStatus
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (user.username && user.username.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesRole =
-      selectedRole === "- Semua Peran -" || 
-      selectedRole === "" ||
-      (user.role && user.role.toLowerCase() === selectedRole.toLowerCase());
+      currentRole === "Semua" || 
+      (user.role && user.role.toLowerCase() === currentRole.toLowerCase());
 
-    return matchesSearch && matchesRole;
+    const matchesStatus = 
+      selectedStatus === "- Semua Status -" || 
+      (user.status && user.status.toLowerCase() === selectedStatus.toLowerCase());
+
+    return matchesSearch && matchesRole && matchesStatus;
   });
 
   return (
     <div className="p-6 font-poppins">
       <PageHeader
-        title="Data Pengguna (Users)"
-        description="Kelola hak akses dan akun pengguna yang terdaftar di sistem."
+        title={currentRole === "Member" ? "Data Member (Pelanggan)" : currentRole === "Admin" ? "Data Admin (Staff)" : "Data Pengguna (Users)"}
+        description={`Kelola hak akses dan akun ${currentRole === "Member" ? "member" : "admin"} yang terdaftar di sistem.`}
         actionButton={
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
@@ -229,9 +228,9 @@ export default function Users() {
           <BsFilter className="text-lg text-gray-500" />
           <div className="w-[160px]">
             <SelectField 
-              options={["- Semua Peran -", "Admin", "Member"]} 
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value)}
+              options={["- Semua Status -", "Active", "Inactive"]} 
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
             />
           </div>
         </div>
@@ -305,7 +304,7 @@ export default function Users() {
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-left">Nama Pengguna</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-left">Username</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Peran (Role)</th>
-              {selectedRole === "Member" && (
+              {currentRole === "Member" && (
                 <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Poin</th>
               )}
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Status</th>
@@ -315,7 +314,7 @@ export default function Users() {
           <tbody className="divide-y divide-gray-100 text-sm">
             {loading ? (
               <tr>
-                <td colSpan={selectedRole === "Member" ? "6" : "5"} className="px-6 py-10 text-center text-gray-500 font-medium">
+                <td colSpan={currentRole === "Member" ? "6" : "5"} className="px-6 py-10 text-center text-gray-500 font-medium">
                   Sedang memuat data dari Supabase...
                 </td>
               </tr>
@@ -338,7 +337,7 @@ export default function Users() {
                       {user.role ? user.role.toUpperCase() : "MEMBER"}
                     </span>
                   </td>
-                  {selectedRole === "Member" && (
+                  {currentRole === "Member" && (
                     <td className="px-6 py-4 text-center font-bold text-orange-500">
                       {user.loyalty_points || 0} Pts
                     </td>
