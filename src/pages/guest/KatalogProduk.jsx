@@ -21,7 +21,16 @@ export default function KatalogProduk() {
   const [voucherInput, setVoucherInput] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
 
-  const { user, role, refreshProfile } = useAuth();
+  // Checkout Modal States
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [checkoutForm, setCheckoutForm] = useState({
+    paymentMethod: "Transfer Bank",
+    deliveryMethod: "Pick Up",
+    deliveryDate: "",
+    deliveryTime: "",
+  });
+
+  const { user, role, profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isMember = location.pathname.includes("/member");
@@ -95,7 +104,7 @@ export default function KatalogProduk() {
     }
   };
 
-  const handleCheckout = async () => {
+  const handleCheckoutClick = () => {
     if (!user) {
       toast.error("Silakan Login terlebih dahulu untuk melakukan Checkout!");
       navigate("/login");
@@ -103,6 +112,19 @@ export default function KatalogProduk() {
     }
     if (role !== "member") {
       toast.error("Hanya akun Member yang dapat melakukan pembelian!");
+      return;
+    }
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    if (checkoutForm.deliveryMethod === "Delivery" && !profile?.address) {
+      toast.error("Alamat belum diisi! Silakan lengkapi alamat di Pengaturan Profil.");
+      return;
+    }
+    if (!checkoutForm.deliveryDate || !checkoutForm.deliveryTime) {
+      toast.error("Mohon pilih tanggal dan jam pengiriman/pengambilan.");
       return;
     }
 
@@ -118,7 +140,10 @@ export default function KatalogProduk() {
           user_id: user.id,
           total_amount: finalPrice,
           points_earned: calculatedPoints,
-          payment_method: "Transfer Bank",
+          payment_method: checkoutForm.paymentMethod,
+          delivery_method: checkoutForm.deliveryMethod,
+          delivery_time: `${checkoutForm.deliveryDate} ${checkoutForm.deliveryTime}`,
+          delivery_address: checkoutForm.deliveryMethod === "Delivery" ? profile?.address : null,
           status: "completed"
         }])
         .select()
@@ -151,6 +176,7 @@ export default function KatalogProduk() {
 
       setCart([]);
       setIsCartOpen(false);
+      setIsCheckoutModalOpen(false);
       
       if (refreshProfile) await refreshProfile();
       
@@ -160,7 +186,7 @@ export default function KatalogProduk() {
       fetchProducts();
     } catch (error) {
       console.error("Error Checkout:", error);
-      toast.error("Terjadi kesalahan saat checkout. Silakan periksa koneksi atau hubungi admin.");
+      toast.error("Terjadi kesalahan saat checkout. Pastikan script SQL sudah dijalankan di Supabase.");
     } finally {
       setIsCheckoutLoading(false);
     }
@@ -469,19 +495,88 @@ export default function KatalogProduk() {
               </div>
               <button 
                 disabled={cart.length === 0 || isCheckoutLoading}
-                onClick={handleCheckout}
+                onClick={handleCheckoutClick}
                 className="w-full bg-teal-600 flex justify-center disabled:bg-gray-300 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition shadow-lg shadow-teal-500/30 disabled:shadow-none"
               >
-                {isCheckoutLoading ? (
-                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                ) : (
-                  "Checkout Sekarang"
-                )}
+                Checkout Sekarang
               </button>
             </div>
 
           </div>
         </>
+      )}
+
+      {/* ── MODAL KONFIRMASI PESANAN ── */}
+      {isCheckoutModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsCheckoutModalOpen(false)}></div>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative z-10 animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-800">Konfirmasi Pesanan</h2>
+              <button onClick={() => setIsCheckoutModalOpen(false)} className="text-gray-400 hover:text-red-500 transition-colors">
+                <BsX className="text-3xl" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCheckout} className="p-6 space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Metode Pengiriman</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className={`border rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-all ${checkoutForm.deliveryMethod === 'Pick Up' ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <input type="radio" name="deliveryMethod" value="Pick Up" className="hidden" checked={checkoutForm.deliveryMethod === 'Pick Up'} onChange={(e) => setCheckoutForm({...checkoutForm, deliveryMethod: e.target.value})} />
+                    <span className="font-bold text-sm">Pick Up</span>
+                    <span className="text-[10px] opacity-70">Ambil di Apotek</span>
+                  </label>
+                  <label className={`border rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-all ${checkoutForm.deliveryMethod === 'Delivery' ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-gray-200 hover:bg-gray-50'}`}>
+                    <input type="radio" name="deliveryMethod" value="Delivery" className="hidden" checked={checkoutForm.deliveryMethod === 'Delivery'} onChange={(e) => setCheckoutForm({...checkoutForm, deliveryMethod: e.target.value})} />
+                    <span className="font-bold text-sm">Delivery</span>
+                    <span className="text-[10px] opacity-70">Diantar ke Alamat</span>
+                  </label>
+                </div>
+              </div>
+
+              {checkoutForm.deliveryMethod === 'Delivery' && (
+                <div className="bg-orange-50 border border-orange-100 rounded-xl p-4">
+                  <p className="text-xs font-bold text-orange-800 mb-1">Alamat Pengiriman:</p>
+                  <p className="text-sm text-orange-900">
+                    {profile?.address ? profile.address : <span className="text-red-500 font-bold">Belum ada alamat! Harap lengkapi di Pengaturan Profil.</span>}
+                  </p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1.5">Tanggal {checkoutForm.deliveryMethod}</label>
+                  <input type="date" required value={checkoutForm.deliveryDate} onChange={(e) => setCheckoutForm({...checkoutForm, deliveryDate: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1.5">Jam</label>
+                  <input type="time" required value={checkoutForm.deliveryTime} onChange={(e) => setCheckoutForm({...checkoutForm, deliveryTime: e.target.value})} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500 outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-1.5">Metode Pembayaran</label>
+                <select value={checkoutForm.paymentMethod} onChange={(e) => setCheckoutForm({...checkoutForm, paymentMethod: e.target.value})} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500 outline-none bg-white">
+                  <option value="Transfer Bank">Transfer Bank (BCA/Mandiri/BNI)</option>
+                  <option value="E-Wallet">E-Wallet (GoPay/OVO/Dana)</option>
+                  {checkoutForm.deliveryMethod === 'Pick Up' && <option value="Bayar di Tempat">Bayar di Tempat (Kasir)</option>}
+                  {checkoutForm.deliveryMethod === 'Delivery' && <option value="COD">Cash On Delivery (COD)</option>}
+                </select>
+              </div>
+
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-gray-500 font-semibold mb-0.5">Total Pembayaran</p>
+                  <p className="text-xl font-black text-teal-600">Rp {finalPrice.toLocaleString("id-ID")}</p>
+                </div>
+                <button type="submit" disabled={isCheckoutLoading} className="bg-teal-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-teal-700 transition shadow-md disabled:bg-gray-400">
+                  {isCheckoutLoading ? "Memproses..." : "Bayar Pesanan"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
     </div>

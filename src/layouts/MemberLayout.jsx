@@ -175,10 +175,27 @@ export default function MemberLayout() {
         )}
       </header>
 
-      {/* ── PAGE CONTENT ───────────────────────────── */}
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-6">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-6 min-h-[calc(100vh-200px)]">
         <Outlet />
       </main>
+
+      {/* ── FOOTER ─────────────────────────────── */}
+      <footer className="bg-white border-t border-gray-100 mt-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-sm">
+                <FaHeartPulse className="text-white text-sm" />
+              </div>
+              <span className="text-[15px] font-bold text-gray-800">PharmaCare</span>
+            </div>
+            <p className="text-sm text-gray-500 font-medium text-center md:text-right">
+              &copy; {new Date().getFullYear()} PharmaCare Apotek. Hak Cipta Dilindungi.<br />
+              <span className="text-xs text-gray-400">Melayani dengan sepenuh hati demi kesehatan Anda.</span>
+            </p>
+          </div>
+        </div>
+      </footer>
 
       <Toaster position="top-right" richColors />
     </div>
