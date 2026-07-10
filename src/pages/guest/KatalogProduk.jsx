@@ -166,13 +166,7 @@ export default function KatalogProduk() {
 
       if (itemsError) throw itemsError;
 
-      for (const item of cart) {
-        const newStock = item.stock - item.qty;
-        await supabase
-          .from("medicines")
-          .update({ stock: newStock })
-          .eq("id", item.id);
-      }
+      // Stok akan otomatis berkurang melalui Database Trigger di Supabase
 
       setCart([]);
       setIsCartOpen(false);
