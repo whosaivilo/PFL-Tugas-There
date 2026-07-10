@@ -23,6 +23,8 @@ export default function Orders() {
         created_at,
         payment_method,
         status,
+        rating,
+        feedback_text,
         profiles (
           full_name,
           username
