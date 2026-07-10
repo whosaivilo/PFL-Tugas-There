@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BsShieldPlus, BsCashStack, BsBriefcase, BsExclamationTriangle, BsArrowRightShort, BsPerson, BsBox, BsGraphUp } from 'react-icons/bs';
+import { BsShieldPlus, BsCashStack, BsBriefcase, BsExclamationTriangle, BsArrowRightShort, BsPerson, BsBox, BsGraphUp, BsStarFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard';
 import Badge from '../components/Badge';
@@ -30,6 +30,7 @@ export default function Dashboard() {
         total_amount,
         created_at,
         status,
+        rating,
         profiles ( full_name ),
         order_items (
           quantity,
@@ -114,11 +115,33 @@ export default function Dashboard() {
     .sort((a, b) => b.sold - a.sold)
     .slice(0, 5);
 
+  // Process Data for Ratings Pie Chart
+  const ratingsCount = { '5 Bintang': 0, '4 Bintang': 0, '3 Bintang': 0, '2 Bintang': 0, '1 Bintang': 0 };
+  let hasRatings = false;
+  orders.forEach(order => {
+    if (order.rating) {
+      ratingsCount[`${order.rating} Bintang`] += 1;
+      hasRatings = true;
+    }
+  });
+
+  const ratingPieData = Object.keys(ratingsCount)
+    .filter(key => ratingsCount[key] > 0)
+    .map(key => ({ name: key, value: ratingsCount[key] }));
+
   const COLORS = ['#14b8a6', '#f97316', '#3b82f6', '#8b5cf6', '#ec4899', '#eab308'];
+  const RATING_COLORS = {
+    '5 Bintang': '#22c55e', // green
+    '4 Bintang': '#84cc16', // lime
+    '3 Bintang': '#eab308', // yellow
+    '2 Bintang': '#f97316', // orange
+    '1 Bintang': '#ef4444'  // red
+  };
 
   const isDataEmpty = orders.length === 0;
   const displayLineData = !isDataEmpty ? lineChartData : [{ name: 'Belum ada data', Revenue: 0 }];
   const displayPieData = !isDataEmpty && pieChartData.length > 0 ? pieChartData : [{ name: 'Belum ada data', value: 1 }];
+  const displayRatingPieData = hasRatings ? ratingPieData : [{ name: 'Belum ada data', value: 1 }];
 
   return (
     <div className="font-poppins pb-10">
@@ -317,7 +340,7 @@ export default function Dashboard() {
       </div>
 
       {/* ADDITIONAL WIDGETS SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
         {isLoading && (
           <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl">
              <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
@@ -380,6 +403,40 @@ export default function Dashboard() {
             {recentMembers.length === 0 && (
               <p className="text-center text-gray-400 text-sm py-4">Belum ada member mendaftar.</p>
             )}
+          </div>
+        </div>
+
+        {/* Customer Ratings Pie Chart */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
+          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center justify-center gap-2">
+            <BsStarFill className="text-orange-400" /> Ulasan Pelanggan
+          </h3>
+          <div className="flex-1 w-full flex items-center justify-center">
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={displayRatingPieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {displayRatingPieData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={!hasRatings ? '#e2e8f0' : RATING_COLORS[entry.name] || COLORS[index % COLORS.length]} 
+                    />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value) => [`${value} Ulasan`, 'Jumlah']}
+                  contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
+                />
+                <Legend verticalAlign="bottom" height={36} iconType="circle" />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
