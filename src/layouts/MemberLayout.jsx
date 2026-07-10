@@ -88,9 +88,8 @@ export default function MemberLayout() {
                 className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 transition"
               >
                 <img
-                  src={profile?.avatar_url}
+                  src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || profile?.username || "U")}&background=0d9488&color=fff`}
                   alt={profile?.full_name}
-                  onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.full_name || profile?.username || "U")}&background=0d9488&color=fff`; }}
                   className="w-7 h-7 rounded-lg object-cover"
                 />
                 <div className="hidden sm:block text-left">

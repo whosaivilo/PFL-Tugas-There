@@ -5,12 +5,16 @@ import Badge from "../../components/Badge";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
 import { useAuth } from "../../contexts/AuthContext";
-import dayjs from "dayjs";
 
 export default function MemberProfile() {
   const { profile } = useAuth();
 
   if (!profile) return null;
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -63,7 +67,7 @@ export default function MemberProfile() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-semibold">Bergabung Sejak</p>
-                  <p className="text-sm font-bold text-gray-800">{dayjs(profile.created_at).format('DD MMM YYYY')}</p>
+                  <p className="text-sm font-bold text-gray-800">{formatDate(profile.created_at)}</p>
                 </div>
               </div>
             </div>
@@ -105,7 +109,7 @@ export default function MemberProfile() {
                 <p className="text-xs text-gray-400 font-semibold mb-1 flex items-center gap-1.5">
                   <BsCalendarDate /> Tanggal Lahir
                 </p>
-                <p className="text-[15px] font-semibold text-gray-800">{profile.birth_date ? dayjs(profile.birth_date).format('DD MMM YYYY') : "-"}</p>
+                <p className="text-[15px] font-semibold text-gray-800">{formatDate(profile.birth_date)}</p>
               </div>
               
               <div className="md:col-span-2">
