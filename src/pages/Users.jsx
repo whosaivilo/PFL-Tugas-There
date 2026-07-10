@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import Table from "../components/Table";
 import InputField from "../components/InputField";
@@ -16,11 +17,18 @@ import {
 } from "@/components/ui/dialog";
 
 export default function Users() {
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRole, setSelectedRole] = useState("- Semua Peran -");
+  
+  const [selectedRole, setSelectedRole] = useState(() => {
+    if (location.pathname.includes("members")) return "Member";
+    if (location.pathname.includes("admins")) return "Admin";
+    return "- Semua Peran -";
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +50,12 @@ export default function Users() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (location.pathname.includes("members")) setSelectedRole("Member");
+    else if (location.pathname.includes("admins")) setSelectedRole("Admin");
+    else setSelectedRole("- Semua Peran -");
+  }, [location.pathname]);
 
   const fetchUsers = async () => {
     setLoading(true);

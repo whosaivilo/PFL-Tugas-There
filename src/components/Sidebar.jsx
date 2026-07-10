@@ -45,6 +45,16 @@ export default function Sidebar({ onClose }) {
       icon: <FaCartPlus className="text-[18px]" />,
     },
     {
+      title: "Daftar Member",
+      path: "/admin/members",
+      icon: <BsPeople className="text-[18px]" />,
+    },
+    {
+      title: "Daftar Admin",
+      path: "/admin/admins",
+      icon: <BsPersonBadge className="text-[18px]" />,
+    },
+    {
       title: "Segmentasi",
       path: "/admin/segmentation",
       icon: <BsGear className="text-[18px]" />,
