@@ -166,7 +166,19 @@ export default function MemberResep() {
                         {new Date(item.created_at).toLocaleDateString("id-ID")}
                       </span>
                     </div>
-                    {item.notes && <p className="text-sm text-gray-600 mb-2 italic">"{item.notes}"</p>}
+                    {item.notes && (
+                      <p className="text-sm text-gray-600 mb-2 italic">
+                        "{item.notes.split('\n[Ditolak:')[0]}"
+                      </p>
+                    )}
+                    {item.status === "Rejected" && (item.reject_reason || (item.notes && item.notes.includes("[Ditolak:"))) && (
+                      <div className="bg-red-50 p-3 rounded-lg border border-red-100 mb-3">
+                        <p className="text-xs text-red-600 font-bold mb-1">Alasan Penolakan:</p>
+                        <p className="text-xs text-red-500 font-medium">
+                          {item.reject_reason || item.notes.split("[Ditolak: ")[1]?.replace("]", "") || item.notes.split("[Ditolak:")[1]?.replace("]", "")}
+                        </p>
+                      </div>
+                    )}
                     <a href={item.image_url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal-600 font-bold hover:underline break-all">
                       Lihat Foto Resep
                     </a>
