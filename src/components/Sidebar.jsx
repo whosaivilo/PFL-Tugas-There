@@ -17,7 +17,7 @@ import { FaCartPlus } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "../lib/supabase";
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("pharmacare_user"));
 
@@ -125,6 +125,7 @@ export default function Sidebar() {
               <NavLink
                 to={menu.path}
                 end={menu.end}
+                onClick={() => onClose && onClose()}
                 className={({ isActive }) =>
                   `flex items-center justify-between px-6 py-3 transition-colors ${
                     isActive
