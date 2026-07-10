@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { BsSearch, BsList } from "react-icons/bs";
-import { MdOutlineGTranslate } from "react-icons/md";
-import { FiChevronDown } from "react-icons/fi";
+import { BsList } from "react-icons/bs";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function MainLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentDate(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const getGreeting = () => {
+    const hour = currentDate.getHours();
+    if (hour < 12) return "Selamat Pagi";
+    if (hour < 15) return "Selamat Siang";
+    if (hour < 18) return "Selamat Sore";
+    return "Selamat Malam";
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }) + " · " + date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#f4f7f6] font-sans relative">
@@ -36,28 +60,17 @@ export default function MainLayout() {
             >
               <BsList className="text-2xl" />
             </button>
-            <div className="relative w-full md:w-[400px]">
-              <input 
-                type="text" 
-                placeholder="Search for anything here.." 
-                className="w-full bg-[#f4f5f7] text-[13px] font-medium py-2.5 pl-4 pr-10 rounded-md outline-none text-gray-700"
-              />
-              <BsSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold" />
-            </div>
+            <h2 className="hidden md:block text-lg font-bold text-gray-800">
+              Admin Workspace
+            </h2>
           </div>
 
-          <div className="hidden md:flex items-center gap-8">
-            <div className="flex items-center gap-2 cursor-pointer">
-              <MdOutlineGTranslate className="text-[20px] text-gray-600" />
-              <span className="text-[13px] font-semibold text-gray-700">English (US)</span>
-              <FiChevronDown className="text-gray-500" />
-            </div>
-            
+          <div className="flex items-center justify-end w-full md:w-auto">
             <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#ffcc00]"></div>
+              <div className="w-6 h-6 rounded-full bg-teal-500 animate-pulse hidden md:block"></div>
               <div className="text-right flex flex-col justify-center">
-                <p className="text-[13px] font-bold text-gray-800 leading-tight flex items-center gap-1 justify-end">Good Morning</p>
-                <p className="text-[11px] font-medium text-gray-500">14 January 2022 · 22:45:04</p>
+                <p className="text-[14px] font-bold text-gray-800 leading-tight flex items-center gap-1 justify-end">{getGreeting()}</p>
+                <p className="text-[12px] font-medium text-gray-500">{formatDate(currentDate)}</p>
               </div>
             </div>
           </div>
