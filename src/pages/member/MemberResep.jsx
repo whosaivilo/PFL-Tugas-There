@@ -4,6 +4,7 @@ import PageHeader from "../../components/PageHeader";
 import Button from "../../components/Button";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "sonner";
 
 export default function MemberResep() {
   const { user } = useAuth();
@@ -35,7 +36,7 @@ export default function MemberResep() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      alert("Harap pilih foto resep terlebih dahulu!");
+      toast.warning("Harap pilih foto resep terlebih dahulu!");
       return;
     }
     
@@ -70,7 +71,7 @@ export default function MemberResep() {
       
       if (dbError) throw dbError;
 
-      alert("Resep berhasil diunggah dan sedang diverifikasi Admin!");
+      toast.success("Resep berhasil diunggah dan sedang diverifikasi Admin!");
       setFile(null);
       setNotes("");
       
@@ -80,7 +81,7 @@ export default function MemberResep() {
       fetchPrescriptions();
       
     } catch (error) {
-      alert("Gagal mengirim resep: " + error.message);
+      toast.error("Gagal mengirim resep: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -92,7 +93,7 @@ export default function MemberResep() {
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       <PageHeader 
-        title="Resep & Pengingat"
+        title="Resep"
         description="Unggah resep doktermu dan kami akan menyiapkannya untukmu."
       />
 

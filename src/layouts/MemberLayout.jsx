@@ -17,6 +17,24 @@ export default function MemberLayout() {
   const { profile } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+
+  React.useEffect(() => {
+    const fetchNotifications = async () => {
+      if (!profile?.id) return;
+      const { data } = await supabase
+        .from("prescriptions")
+        .select("*")
+        .eq("user_id", profile.id)
+        .order("created_at", { ascending: false })
+        .limit(3);
+      if (data) {
+        setNotifications(data);
+      }
+    };
+    fetchNotifications();
+  }, [profile]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -77,10 +95,42 @@ export default function MemberLayout() {
           {/* Right Side: Bell + Avatar Dropdown */}
           <div className="flex items-center gap-2 shrink-0">
             {/* Notif */}
-            <button className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition">
-              <BsBell className="text-gray-500 text-lg" />
-              <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setIsNotifOpen(!isNotifOpen)}
+                className="relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition"
+              >
+                <BsBell className="text-gray-500 text-lg" />
+                {notifications.length > 0 && <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full" />}
+              </button>
+
+              {isNotifOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setIsNotifOpen(false)} />
+                  <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="p-3 border-b border-gray-50 bg-slate-50 flex items-center justify-between">
+                      <p className="text-xs font-bold text-gray-800">Notifikasi</p>
+                      <span className="text-[10px] font-semibold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">{notifications.length} Baru</span>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="p-4 text-center text-xs text-gray-500">Belum ada notifikasi</div>
+                      ) : (
+                        notifications.map((notif) => (
+                          <div key={notif.id} className="p-3 border-b border-gray-50 hover:bg-gray-50 transition cursor-pointer" onClick={() => { setIsNotifOpen(false); navigate('/member/resep'); }}>
+                            <p className="text-xs font-bold text-gray-800 mb-1">Status Resep: <span className={notif.status === 'Pending' ? 'text-yellow-600' : notif.status === 'Processed' ? 'text-emerald-600' : 'text-red-600'}>{notif.status}</span></p>
+                            <p className="text-[11px] text-gray-500 leading-tight">
+                              {notif.status === 'Pending' ? 'Resep Anda sedang diverifikasi admin.' : notif.status === 'Processed' ? 'Hore! Resep Anda disetujui.' : 'Maaf, resep Anda ditolak.'}
+                            </p>
+                            <p className="text-[9px] text-gray-400 mt-1">{new Date(notif.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* Avatar Dropdown */}
             <div className="relative">
