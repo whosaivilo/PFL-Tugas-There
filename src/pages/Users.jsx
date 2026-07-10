@@ -24,6 +24,7 @@ export default function Users() {
   const [searchTerm, setSearchTerm] = useState("");
   
   const [selectedStatus, setSelectedStatus] = useState("- Semua Status -");
+  const [selectedLevel, setSelectedLevel] = useState("- Semua Level -");
   
   const currentRole = location.pathname.includes("members") ? "Member" 
                     : location.pathname.includes("admins") ? "Admin" 
@@ -133,7 +134,12 @@ export default function Users() {
       selectedStatus === "- Semua Status -" || 
       (user.status && user.status.toLowerCase() === selectedStatus.toLowerCase());
 
-    return matchesSearch && matchesRole && matchesStatus;
+    const matchesLevel =
+      currentRole !== "Member" ||
+      selectedLevel === "- Semua Level -" ||
+      (user.member_level && user.member_level.toLowerCase() === selectedLevel.toLowerCase());
+
+    return matchesSearch && matchesRole && matchesStatus && matchesLevel;
   });
 
   return (
@@ -224,15 +230,30 @@ export default function Users() {
           />
         </div>
         
-        <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
-          <BsFilter className="text-lg text-gray-500" />
-          <div className="w-[160px]">
-            <SelectField 
-              options={["- Semua Status -", "Active", "Inactive"]} 
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            />
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+            <BsFilter className="text-lg text-gray-500" />
+            <div className="w-[160px]">
+              <SelectField 
+                options={["- Semua Status -", "Active", "Inactive"]} 
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              />
+            </div>
           </div>
+
+          {currentRole === "Member" && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 text-sm">
+              <BsFilter className="text-lg text-gray-500" />
+              <div className="w-[160px]">
+                <SelectField 
+                  options={["- Semua Level -", "Silver", "Gold", "Platinum"]} 
+                  value={selectedLevel}
+                  onChange={(e) => setSelectedLevel(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -305,7 +326,7 @@ export default function Users() {
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-left">Username</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Peran (Role)</th>
               {currentRole === "Member" && (
-                <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Poin</th>
+                <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Level Member</th>
               )}
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Status</th>
               <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase text-center">Aksi</th>
@@ -338,8 +359,14 @@ export default function Users() {
                     </span>
                   </td>
                   {currentRole === "Member" && (
-                    <td className="px-6 py-4 text-center font-bold text-orange-500">
-                      {user.loyalty_points || 0} Pts
+                    <td className="px-6 py-4 text-center">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
+                        user.member_level === 'Platinum' ? 'bg-violet-100 text-violet-700 border border-violet-200' :
+                        user.member_level === 'Gold' ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                        'bg-gray-100 text-gray-600 border border-gray-200'
+                      }`}>
+                        {user.member_level || "Silver"}
+                      </span>
                     </td>
                   )}
                   <td className="px-6 py-4 text-center">

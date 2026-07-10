@@ -42,7 +42,8 @@ export const usersAPI = {
         username: p.username,
         role: p.role || 'member',
         status: 'Active',
-        loyalty_points: p.loyalty_points
+        loyalty_points: p.loyalty_points,
+        member_level: p.member_level || 'Silver'
       }));
       return { success: true, data: mappedData };
     } catch (error) {
