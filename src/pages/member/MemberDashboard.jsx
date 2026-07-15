@@ -232,7 +232,7 @@ export default function MemberDashboard() {
                   <Link key={item.id} to="/member/katalog" className="group bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-teal-200 transition-all flex flex-col justify-between">
                     <div>
                       <div className="w-full h-24 bg-gray-50 rounded-xl mb-3 overflow-hidden flex items-center justify-center">
-                        <img src={item.image_url} alt={item.name} className="h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => e.target.src='https://images.unsplash.com/photo-1584308666744-24d5e4a83852?w=300&q=80'} />
+                        <img src={item.image_url || '/img/obat.jpg'} alt={item.name} className="h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => e.target.src='/img/obat.jpg'} />
                       </div>
                       <h4 className="font-bold text-gray-800 text-sm mb-1 group-hover:text-teal-600 transition-colors line-clamp-2">{item.name}</h4>
                       <p className="text-[10px] text-gray-400 font-semibold mb-2">{item.group_name}</p>
